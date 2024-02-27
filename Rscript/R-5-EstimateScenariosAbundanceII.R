@@ -1,3 +1,5 @@
+oldw <- getOption("warn")
+options(warn = -1) # temporarily remove warnings, in case dir exists and graphics warnings
 
 ### Setting output directory, summarize results and adjust meta-data
     # run once for temperature, once for precipitation
@@ -76,15 +78,15 @@ prediction2$prediction <- factor(prediction2$prediction, levels=sort(as.characte
 #### prepare risk plot, adjust data with respect to temperature or precipitation
 if(toAnalyze == "results.prec"){
   reverse = F
-  prediction2$temp_increase <-  factor(round(as.numeric(as.character(prediction2$temp_increase))^2, digits=0))
-  prediction$temp_increase <-  factor(round(as.numeric(as.character(prediction$temp_increase))^2, digits=0))
+  prediction2$temp_increase <-  factor(round(as.numeric(as.character(prediction2$temp_increase))^2, digits=1))
+  prediction$temp_increase <-  factor(round(as.numeric(as.character(prediction$temp_increase))^2, digits=1))
   
   prediction2$prediction <- factor(prediction2$prediction, levels=sort(as.character(unique( prediction2$prediction)), decreasing =F), ordered=T)
   prediction2$iPC <- factor(prediction2$iPC, levels=sort(as.character(unique(prediction2$iPC)), decreasing =T), ordered=TRUE)
   criterion=">=q10"
   prediction2$temp_increase2 <- paste("-",prediction2$temp_increase,"mm",sep="")
   prediction2$temp_increase2 <- factor(prediction2$temp_increase2,levels=unique(prediction2$temp_increase2[order(prediction2$temp_increase)]), ordered=T)
-  subset_levels <- seq(4,20,4)
+  subset_levels <- seq(0,25,5)
 
 }else{
   reverse = T
@@ -140,5 +142,7 @@ ggplot(prediction2.1, aes(fill=iPC, shape=crop,y=accumulated.rel, alpha=crop, co
   scale_x_continuous(breaks = c(0,2)) + 
   theme(legend.position="bottom")
 dev.off()
+
+options(warn = oldw)
 
 ##  repeat from return point 1 for precipitation

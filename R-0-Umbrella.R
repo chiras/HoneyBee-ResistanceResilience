@@ -38,7 +38,7 @@ setwd('/Users/ra39huv/TMP/Data_processing/ITS2_Insignia.24-01-30/TestFullPipelin
 marker="ITS2"
 source('Rscript/metabarcoding_tools_0-1a.R')
 
-# run code
+# run code for data preparations and graphs
 source("Rscript/R-1-Preprocessing.R")
 source("Rscript/R-2-DiversityMap.R", print.eval=TRUE)
 source("Rscript/R-3-EstimateDistributions.R")
@@ -46,6 +46,13 @@ source("Rscript/R-4-EstimateScenariosAbundance.R")
 
 toAnalyze = "results.temp" 
 source("Rscript/R-5-EstimateScenariosAbundanceII.R", print.eval=TRUE)
+source("Rscript/R-6-TemporalProgression.R", print.eval=TRUE)
 
 toAnalyze = "results.prec" 
 source("Rscript/R-5-EstimateScenariosAbundanceII.R", print.eval=TRUE)
+source("Rscript/R-6-TemporalProgression.R", print.eval=TRUE)
+
+source("Rscript/R-7-ResistanceResilience.R", print.eval=TRUE)
+
+# stats
+
