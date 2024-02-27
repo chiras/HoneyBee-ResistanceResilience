@@ -103,15 +103,15 @@ distance.tax <-foreach (plant = plant_taxa2, .combine=cbind, .options.snow=opts,
       if (plant == plant.replacement){
         tax.dist <- 0
       }else if (plant.df[plant,"genus"] == plant.df[plant.replacement,"genus"]){
-        tax.dist <- 0.2 
+        tax.dist <- 0.2
       }else if (plant.df[plant,"family"] == plant.df[plant.replacement,"family"]){
-        tax.dist <- 0.4 
+        tax.dist <- 0.4
       }else if (plant.df[plant,"order"] == plant.df[plant.replacement,"order"]){
-        tax.dist <- 0.6 
+        tax.dist <- 0.6
       }else if (plant.df[plant,"phylum"] == plant.df[plant.replacement,"phylum"]){
-        tax.dist <- 0.8 
+        tax.dist <- 0.8
       }else{
-        tax.dist <- 1 
+        tax.dist <- 1
       }
     plant.qs[plant.replacement,1] <- tax.dist
     }
