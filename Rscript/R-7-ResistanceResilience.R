@@ -98,8 +98,8 @@ distance.tax <-foreach (plant = plant_taxa2, .combine=cbind, .options.snow=opts,
   rownames(plant.qs) <- plant_taxa2
   
   for (plant.replacement in plant_taxa2){
-    tax.dist = NA 
-    if (!is.na(plant.df[plant.replacement,"genus"]) & !is.na(plant.df[plant,"genus"])){ 
+    tax.dist <- NA
+    if (!is.na(plant.df[plant.replacement,"genus"]) && !is.na(plant.df[plant,"genus"])){ 
       if (plant == plant.replacement){
         tax.dist <- 0
       }else if (plant.df[plant,"genus"] == plant.df[plant.replacement,"genus"]){
