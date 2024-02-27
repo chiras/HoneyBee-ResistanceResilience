@@ -1,3 +1,7 @@
+################################################
+### Preprocessing follows
+### https://github.com/chiras/metabarcoding_pipeline
+### https://doi.org/10.1098/rstb.2021.0171
 
 print("Data loading and preparation")
 

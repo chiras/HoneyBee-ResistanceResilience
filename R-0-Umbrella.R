@@ -1,12 +1,15 @@
 ################################################
-# R data analysis for metabarcoding
+# R analysis for metabarcoding data
 # by Alexander Keller (LMU München)
 # keller@bio.lmu.de
 #
 # Created: Thu Nov 16 19:39:58 CET 2023
-# Project: ITS2_Insignia
+# Project: ITS2_HoneyBee-ResiResi
 # Marker: ITS2
-# For: INSIGNIA
+################################################
+# Bioinformatics follow:
+# https://github.com/chiras/metabarcoding_pipeline
+# https://doi.org/10.1098/rstb.2021.0171
 ################################################
 
 # Preparation
