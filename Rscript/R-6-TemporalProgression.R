@@ -78,4 +78,8 @@ ggplot(prediction.season2.1, aes(x=as.numeric(month),y=accumulated, col=factor(c
   
 dev.off()   
 
+file.copy(paste(toAnalyze,"season_q90_distribution_sub.pdf",sep="/"), paste("plots",paste(toAnalyze,"season_q90_distribution_sub.pdf", sep="."),sep="/"))
+file.copy(paste(toAnalyze,"season_q90_distribution_full.pdf",sep="/"), paste("plots.supplement",paste(toAnalyze,"season_q90_distribution_full.pdf", sep="."),sep="/"))
+
+
 options(warn = oldw)

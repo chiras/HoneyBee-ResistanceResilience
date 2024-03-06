@@ -302,3 +302,7 @@ ggplot(prediction.all.mean[prediction.all.mean$temp_increase %in% 1:5 & predicti
   coord_fixed()
 
 dev.off()
+
+file.rename("resistance_resilience_sub.pdf", paste("plots","resistance_resilience_sub.pdf",sep="/"))
+file.rename("resistance_resilience_full.pdf", paste("plots.supplement","resistance_resilience_full.pdf",sep="/"))
+

@@ -4,6 +4,13 @@
 ## Estimate plant temperature and precipitation distributions
 
 print("Estimate plant temperature and precipitation distributions")
+pdf("plots.supplement/temperature_distribution_samples.pdf", width=7, height=6.5)
+  hist(data.map$Temp)
+dev.off()
+
+pdf("plots.supplement/precipitation_distribution_samples.pdf", width=7, height=6.5)
+  hist(data.map$Prec)
+dev.off()
 
 ### use multiple cores to speed up the process
 cores=detectCores()

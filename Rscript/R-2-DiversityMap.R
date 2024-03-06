@@ -22,9 +22,10 @@ world <- ne_countries(scale = 50, returnclass = 'sf')
 world <- map_data("world", regions=c("Czech Republic",names(table(diversity$Country))))
 
 ### plot diversity
-pdf("diversity_map.pdf", width=7, height=6.5)
+pdf("plots.supplement/diversity_map.pdf", width=7, height=6.5)
 ggplot() + geom_polygon(data = world, aes(x = long, y = lat, group = group), fill = "lightgray", colour = "white") + 
   theme_bw()+
   geom_jitter(data=diversity,aes(x=CoordX,y=CoordY, col=Temp), width=0.2, height=0.2, size=2)+
   scale_color_viridis()
 dev.off()
+

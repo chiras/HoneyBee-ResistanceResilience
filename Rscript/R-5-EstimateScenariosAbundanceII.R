@@ -143,6 +143,9 @@ ggplot(prediction2.1, aes(fill=iPC, shape=crop,y=accumulated.rel, alpha=crop, co
   theme(legend.position="bottom")
 dev.off()
 
+file.copy(paste(toAnalyze,"taxa_loss_abundance_latitude_sub.pdf",sep="/"), paste("plots",paste(toAnalyze,"taxa_loss_abundance_latitude_sub.pdf", sep="."),sep="/"))
+file.copy(paste(toAnalyze,"taxa_loss_abundance_latitude_full.pdf",sep="/"), paste("plots.supplement",paste(toAnalyze,"taxa_loss_abundance_latitude_full.pdf", sep="."),sep="/"))
+
 options(warn = oldw)
 
 ##  repeat from return point 1 for precipitation

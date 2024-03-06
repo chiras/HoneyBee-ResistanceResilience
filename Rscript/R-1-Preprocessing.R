@@ -13,7 +13,7 @@ data.tax <- tax_table(as.matrix(read.table("Data/total.taxonomy.sed.vsearch", he
 data.otu <- otu_table(read.table("Data/total.asv_table.bytable.sed.txt"), taxa_are_rows=T)
 
 ## Sample metadata and adapt names
-data.map <- sample_data(read.table("Data/Map4.txt", header=T, row.names=1,  sep="\t", fill=T))
+data.map <- sample_data(read.table("Data/Map4.1.txt", header=T, row.names=1,  sep="\t", fill=T))
 sample_names(data.map) <- gsub("-",".",sample_names(data.map))
 
 ## check metadata vs. samples in sequencing data consistency

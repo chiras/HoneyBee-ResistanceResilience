@@ -37,9 +37,15 @@ library(progress)
 
 ## setting directories, variables and custom functions
 setwd('/Users/ra39huv/TMP/Data_processing/ITS2_Insignia.24-01-30/TestFullPipeline')
+dir.create("plots")
+dir.create("plots.supplement")
 
 marker="ITS2"
 source('Rscript/metabarcoding_tools_0-1a.R')
+
+# unzip data 
+unzip("Data/total.asv_table.bytable.sed.txt.zip", overwrite = F, exdir="Data")
+unzip("Data/total.taxonomy.sed.vsearch.zip", overwrite = F, exdir="Data")
 
 # run code for data preparations and graphs
 source("Rscript/R-1-Preprocessing.R")
