@@ -1,6 +1,6 @@
 #todo: matching issues in merge? 
 
-measure = "Precipitation"
+measure = "Temperature"
 historical.data <- read.table(paste("Data/",measure,"_Data.csv",sep=""), sep=",", header=T)
 
 head(historical.data)
@@ -33,8 +33,8 @@ hist.melt4$year_record <- as.numeric(hist.melt4$year_record.x)
 
 pdf(paste("plots.supplement/",measure,"_historical_change.pdf",sep=""), width=8, height=6)
 ggplot(hist.melt4,aes(y=difference,x=year_record, col=as.factor(CoordY.y)))+
-  geom_smooth(method="loess",n=100)+
-  #  geom_point(alpha=0.2,size=1)+
+  #geom_smooth(method="loess",n=100)+
+    geom_point(alpha=0.2,size=1)+
   #facet_wrap(month_record.x ~.)+
   theme_bw()+
   scale_color_viridis(discrete=T)+
