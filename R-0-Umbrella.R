@@ -65,6 +65,13 @@ source("Rscript/R-6-TemporalProgression.R", print.eval=TRUE)
 
 source("Rscript/R-7-ResistanceResilience.R", print.eval=TRUE)
 
+# Historical changes
+measure="Temperature"
+source("Rscript/R-8-HistoricalChanges.R", print.eval=TRUE)
+
+measure="Precipitation"
+source("Rscript/R-8-HistoricalChanges.R", print.eval=TRUE)
+
 # stats
 
 names(test_results)
