@@ -48,6 +48,8 @@ unzip("Data/total.asv_table.bytable.sed.txt.zip", overwrite = F, exdir="Data")
 unzip("Data/total.taxonomy.sed.vsearch.zip", overwrite = F, exdir="Data")
 
 # run code for data preparations and graphs
+test_results=list()
+
 source("Rscript/R-1-Preprocessing.R")
 source("Rscript/R-2-DiversityMap.R", print.eval=TRUE)
 source("Rscript/R-3-EstimateDistributions.R")
@@ -65,3 +67,4 @@ source("Rscript/R-7-ResistanceResilience.R", print.eval=TRUE)
 
 # stats
 
+names(test_results)
