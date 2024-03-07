@@ -1,7 +1,5 @@
 #todo: matching issues in merge? 
 
-
-measure = "Temperature"
 historical.data <- read.table(paste("Data/",measure,"_Data.csv",sep=""), sep=",", header=T)
 
 historical.data.merge <- merge(data.frame(sample_data(data.species.rel.filter))[,c("BK","Month","CoordY")],historical.data,by="BK")
@@ -63,6 +61,6 @@ hist.melt.6 <- hist.melt5 %>%
   summarize(mean = mean(as.numeric(difference), na.rm=T))
 
 
-test_results[["historical_change_since_1973"]] <- cor.test(hist.melt.6$mean,as.numeric(hist.melt.6$CoordY.x))
+test_results[[paste(measure,"historical_change_since_1973", sep="_")]] <- cor.test(hist.melt.6$mean,as.numeric(hist.melt.6$CoordY.x))
 
 
