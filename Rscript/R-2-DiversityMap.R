@@ -24,7 +24,9 @@ pdf("plots.supplement/diversity_map.pdf", width=7, height=6.5)
 ggplot() + geom_polygon(data = world, aes(x = long, y = lat, group = group), fill = "lightgray", colour = "white") + 
   theme_bw()+
   geom_jitter(data=diversity,aes(x=CoordX,y=CoordY, col=Shannon), width=0.2, height=0.2, size=2, alpha=0.5)+
-  scale_color_viridis(option="magma")
+  scale_color_viridis(option="magma") +   
+  ylab("Latitude") + xlab("Longitude")+
+
 dev.off()
 
 ### plot diversity & latitiude 
@@ -35,7 +37,8 @@ ggplot(diversity, aes(y=Shannon, x=CoordY, col=CoordY))+
   #geom_point()+
   geom_smooth(method = "lm", formula = y ~ x + I(x^2), col="black")+
   scale_color_viridis(discrete=F)+
-  theme_bw()
+  theme_bw() +   
+  xlab("Latitude") + ylab("Shannon's H Diversity")+
 dev.off()
 
 test_results[["diversity_latitude_quadratic"]] <- summary(step(lm(exp(Shannon)~CoordY+I(CoordY^2),data=diversity)))
