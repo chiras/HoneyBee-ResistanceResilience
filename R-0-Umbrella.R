@@ -50,11 +50,13 @@ unzip("Data/total.taxonomy.sed.vsearch.zip", overwrite = F, exdir="Data")
 # run code for data preparations and graphs
 test_results=list()
 
+# Prepare intermediate data and estimate distributions
 source("Rscript/R-1-Preprocessing.R")
 source("Rscript/R-2-DiversityMap.R", print.eval=TRUE)
 source("Rscript/R-3-EstimateDistributions.R")
 source("Rscript/R-4-EstimateScenariosAbundance.R")
 
+# Analyse risks
 toAnalyze = "results.temp" 
 source("Rscript/R-5-EstimateScenariosAbundanceII.R", print.eval=TRUE)
 source("Rscript/R-6-TemporalProgression.R", print.eval=TRUE)
@@ -63,6 +65,7 @@ toAnalyze = "results.prec"
 source("Rscript/R-5-EstimateScenariosAbundanceII.R", print.eval=TRUE)
 source("Rscript/R-6-TemporalProgression.R", print.eval=TRUE)
 
+# Calculate Resistance and Resilience
 source("Rscript/R-7-ResistanceResilience.R", print.eval=TRUE)
 
 # Historical changes

@@ -273,7 +273,7 @@ ggplot(prediction.all.mean)+
   facet_grid(temp_increase2~prec_increase2)+
   scale_x_continuous(limits=c(0,1), breaks=c(0,0.5))+
   scale_y_continuous(limits=c(0,1), breaks=c(0,0.5))+
-  scale_color_viridis(option="inferno", direction=-1, begin=0, end=0.8)+theme_bw()+  
+  scale_color_viridis(option="inferno", direction=-1, begin=0)+theme_bw()+  #, end=0.8
   theme(panel.margin.y = unit(0, "lines"),
         strip.text.y = element_text(angle = 360, hjust = 0),
         strip.background =element_rect(fill="white"))+
@@ -292,7 +292,8 @@ ggplot(prediction.all.mean[prediction.all.mean$temp_increase %in% 1:5 & predicti
   facet_grid(temp_increase2~prec_increase2)+
   scale_x_continuous(limits=c(0,1), breaks=c(0,0.5))+
   scale_y_continuous(limits=c(0,1), breaks=c(0,0.5))+
-  scale_color_viridis(option="inferno", direction=-1, begin=0, end=0.8)+theme_bw()+  
+  scale_color_viridis(option="inferno", direction=-1, begin=0)+ #, end=0.8
+  theme_bw()+  
   theme(panel.margin.y = unit(0, "lines"),
         strip.text.y = element_text(angle = 360, hjust = 0),
         strip.background =element_rect(fill="white"))+
