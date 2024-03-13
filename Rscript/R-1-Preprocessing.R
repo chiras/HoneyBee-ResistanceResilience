@@ -57,3 +57,4 @@ ntaxa <- length(taxa_names(data.species.rel.filter))
 # subset to correct samples for this analysis
 samples <- subset_samples(data.species.rel.filter, CoordY != 0 & Temp != 0 & Project=="INSIGNIA-EU")
 samples <- subset_samples(samples, Samples=="Yes")
+samples <- subset_taxa(samples, rowSums(otu_table(samples))!=0)
