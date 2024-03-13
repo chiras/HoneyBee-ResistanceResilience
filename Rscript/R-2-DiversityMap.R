@@ -38,7 +38,7 @@ ggplot(diversity, aes(y=Shannon, x=CoordY, col=CoordY))+
   geom_smooth(method = "lm", formula = y ~ x + I(x^2), col="black")+
   scale_color_viridis(discrete=F)+
   theme_bw() +   
-  xlab("Latitude") + ylab("Shannon's H Diversity")+
+  xlab("Latitude") + ylab("Shannon's H Diversity")
 dev.off()
 
 test_results[["diversity_latitude_quadratic"]] <- summary(step(lm(exp(Shannon)~CoordY+I(CoordY^2),data=diversity)))
