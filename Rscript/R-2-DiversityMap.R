@@ -25,7 +25,7 @@ ggplot() + geom_polygon(data = world, aes(x = long, y = lat, group = group), fil
   theme_bw()+
   geom_jitter(data=diversity,aes(x=CoordX,y=CoordY, col=Shannon), width=0.2, height=0.2, size=2, alpha=0.5)+
   scale_color_viridis(option="magma") +   
-  ylab("Latitude") + xlab("Longitude")+
+  ylab("Latitude") + xlab("Longitude")
 
 dev.off()
 
