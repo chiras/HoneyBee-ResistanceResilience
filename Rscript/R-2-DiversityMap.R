@@ -29,3 +29,15 @@ ggplot() + geom_polygon(data = world, aes(x = long, y = lat, group = group), fil
   scale_color_viridis()
 dev.off()
 
+### plot diversity & latitiude 
+
+pdf("plots.supplement/diversity_latitude_quadratic.pdf", width=5.5, height=5)
+ggplot(diversity, aes(y=Shannon, x=CoordY, col=CoordY))+
+  geom_boxplot(aes(group=as.factor(CoordY)))+
+  #geom_point()+
+  geom_smooth(method = "lm", formula = y ~ x + I(x^2), col="black")+
+  scale_color_viridis(discrete=F)+
+  theme_bw()
+dev.off()
+
+test_results[["diversity_latitude_quadratic"]] <- summary(step(lm(exp(Shannon)~CoordY+I(CoordY^2),data=diversity)))
