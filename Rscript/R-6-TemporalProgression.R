@@ -83,3 +83,5 @@ file.copy(paste(toAnalyze,"season_q90_distribution_full.pdf",sep="/"), paste("pl
 
 
 options(warn = oldw)
+
+# ANOVA prediction.season2.1

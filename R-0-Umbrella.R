@@ -72,6 +72,34 @@ source("Rscript/R-8-HistoricalChanges.R", print.eval=TRUE)
 measure="Precipitation"
 source("Rscript/R-8-HistoricalChanges.R", print.eval=TRUE)
 
-# stats
+# Statistics
 
 names(test_results)
+
+# Historical Temperature min and max
+# southern
+mean(test_results$Temperature_historical_change_since_1973_within[test_results$Temperature_historical_change_since_1973_within$lat < 45,"mean"])
+max(mean(test_results$Temperature_historical_change_since_1973_within[test_results$Temperature_historical_change_since_1973_within$lat < 45,"max"]))
+
+# central
+mean(test_results$Temperature_historical_change_since_1973_within[test_results$Temperature_historical_change_since_1973_within$lat > 45 & test_results$Temperature_historical_change_since_1973_within$lat < 54,"mean"])
+max(mean(test_results$Temperature_historical_change_since_1973_within[test_results$Temperature_historical_change_since_1973_within$lat > 45 & test_results$Temperature_historical_change_since_1973_within$lat < 54,"max"]))
+
+# northern
+mean(test_results$Temperature_historical_change_since_1973_within[test_results$Temperature_historical_change_since_1973_within$lat > 54,"mean"])
+max(mean(test_results$Temperature_historical_change_since_1973_within[test_results$Temperature_historical_change_since_1973_within$lat > 54,"max"]))
+
+# Precipitation 
+# southern
+diff(range(test_results$Precipitation_historical_change_since_1973_within[test_results$Precipitation_historical_change_since_1973_within$lat < 45,c("min","max")]))
+min(test_results$Precipitation_historical_change_since_1973_within[test_results$Precipitation_historical_change_since_1973_within$lat < 45,"min"])
+
+# central
+diff(range(test_results$Precipitation_historical_change_since_1973_within[test_results$Precipitation_historical_change_since_1973_within$lat > 45 & test_results$Precipitation_historical_change_since_1973_within$lat < 54,c("min","max")]))
+min(test_results$Precipitation_historical_change_since_1973_within[test_results$Precipitation_historical_change_since_1973_within$lat > 45 & test_results$Precipitation_historical_change_since_1973_within$lat < 54,"min"])
+
+# northern
+diff(range(test_results$Precipitation_historical_change_since_1973_within[test_results$Precipitation_historical_change_since_1973_within$lat > 54,c("min","max")]))
+min(test_results$Precipitation_historical_change_since_1973_within[test_results$Precipitation_historical_change_since_1973_within$lat > 54,"min"])
+
+

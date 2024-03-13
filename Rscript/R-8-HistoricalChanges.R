@@ -1,4 +1,4 @@
-#todo: matching issues in merge? 
+#todo: matching issues? see differences in 1973 plots and overall
 
 historical.data <- read.table(paste("Data/",measure,"_Data.csv",sep=""), sep=",", header=T)
 
@@ -34,8 +34,8 @@ ggplot(hist.melt4,aes(y=value.x,x=year_record, col=as.factor(CoordY.y)))+
   #geom_point(alpha=0.2,size=1)+
   #facet_wrap(month_record.x ~.)+
   theme_bw()+
-  scale_color_viridis(discrete=T, end=0.8)+
-  scale_fill_viridis(discrete=T, end=0.8)+
+  scale_color_viridis(discrete=T)+ #, end=0.8
+  scale_fill_viridis(discrete=T)+ #, end=0.8
   xlim(1900,2023)
 dev.off()
 
@@ -80,7 +80,7 @@ t.tests <- data.frame()
 for (latitude in unique(hist.melt.6$CoordY.x)){
   sub_difference <- hist.melt5[hist.melt5$CoordY.x==latitude,"difference"]
   test <- t.test(sub_difference,mu=0,alternative="two.sided")
-  t.tests <- rbind(t.tests,data.frame(lat=latitude, p.value = round(test$p.value, digits=3), est=test$statistic))
+  t.tests <- rbind(t.tests,data.frame(lat=latitude, p.value = round(test$p.value, digits=3), est=test$statistic, mean=mean(sub_difference), max=max(sub_difference), min=min(sub_difference)))
 }
 
 t.tests$signif2 <- substr(as.character(t.tests$est),1,1)
@@ -104,7 +104,7 @@ test_results[[paste(measure,"historical_change_since_1973_within", sep="_")]] <-
 pdf(paste("plots.supplement/",measure,"_historical_1973.pdf",sep=""), width=8, height=6)
 ggplot(hist.melt5,aes(y=difference,x=CoordY.x, col=as.factor(CoordY.x)))+
   geom_boxplot()+
-  geom_hline(yintercept=1)+
+  geom_hline(yintercept=0)+
   geom_smooth(aes(y=difference,x=CoordY.x), inherit.aes = F, col="black", method="loess")+
   #geom_point(alpha=0.2,size=1)+
   #facet_wrap(month_record.x ~.)+
