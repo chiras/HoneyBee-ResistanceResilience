@@ -5,6 +5,7 @@
 print("Create diversity distribution plot")
 
 samples <- subset_samples(data.species.rel.filter, CoordY != 0 & Temp != 0 & Project=="INSIGNIA-EU")
+samples <- subset_samples(samples, Samples=="Yes")
 
 ### calcualate diversity
 diversity <- diversity(t(otu_table(samples)))

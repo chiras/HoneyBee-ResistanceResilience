@@ -58,10 +58,10 @@ prediction.temp.exact <- foreach(prec_increase=range.temp, .options.snow=opts , 
 
 
 print("Plant geographic distances")
-geodist <- distm(sample_data(data.species.rel.filter)[,c("CoordX","CoordY")], fun = distHaversine)
+geodist <- distm(sample_data(samples)[,c("CoordX","CoordY")], fun = distHaversine)
 geodist <- rescale(sqrt(geodist), c(0,1))
-row.names(geodist) <-rownames(sample_data(data.species.rel.filter))
-colnames(geodist) <- rownames(sample_data(data.species.rel.filter))     
+row.names(geodist) <-rownames(sample_data(samples))
+colnames(geodist) <- rownames(sample_data(samples))     
       
 
 data.map$site = interaction(data.map$CoordY, data.map$CoordX, sep = "-" )
@@ -74,7 +74,7 @@ distance.geo <- foreach(sample=sites, .options.snow=opts , .combine="cbind",  .p
   rownames(plant.qs) <- plant_taxa
   
   for (plant in plant_taxa){
-    sites.present1 <- colnames(otu_table(data.species.rel.filter)[,otu_table(data.species.rel.filter)[plant,]>0])
+    sites.present1 <- colnames(otu_table(samples)[,otu_table(samples)[plant,]>0])
     min.distance <- min(geodist[sites.present1,sample])
 
     plant.qs[plant,1] <- min.distance
@@ -83,7 +83,7 @@ distance.geo <- foreach(sample=sites, .options.snow=opts , .combine="cbind",  .p
 }
 
 print("Plant taxonomic distances")
-plant.df <- merge(plant.temp, data.frame(tax_table(data.species.rel.filter)), by="species")      
+plant.df <- merge(plant.temp, data.frame(tax_table(samples)), by="species")      
 rownames(plant.df) <- plant.df$species
 plant.df$endemism <- rescale(sqrt(1/plant.df$countries), c(0,1))
       

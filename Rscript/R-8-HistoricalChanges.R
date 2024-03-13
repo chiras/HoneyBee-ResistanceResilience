@@ -2,7 +2,7 @@
 
 historical.data <- read.table(paste("Data/",measure,"_Data.csv",sep=""), sep=",", header=T)
 
-historical.data.merge <- merge(data.frame(sample_data(data.species.rel.filter))[,c("BK","Month","CoordY")],historical.data,by="BK")
+historical.data.merge <- merge(data.frame(sample_data(samples))[,c("BK","Month","CoordY")],historical.data,by="BK")
 
 hist.melt <- reshape2::melt((historical.data.merge), value.name="Value", id.vars=c("BK","Month","CoordY"))
 
