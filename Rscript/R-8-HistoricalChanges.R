@@ -51,11 +51,13 @@ if(measure=="Temperature"){
   hist.melt5$difference <- (hist.melt5$value.x) - (hist.melt5$value.y)
   breaks_plot=seq(-10,10,1)
   ymin = 5
+  ymin2 = 2.5
 }else{
   breaks_plot=seq(-200,+200,20)
   #-> positive numbers: decrease of Prec, negative numbers: increase of Prec over time
   hist.melt5$difference <- ((hist.melt5$value.x) - (hist.melt5$value.y))
   ymin = -25
+  ymin2 = +50
 }
 hist.melt5$difference<- -hist.melt5$difference
 
@@ -80,15 +82,30 @@ hist.melt.6 <- hist.melt5 %>%
 test_results[[paste(measure,"historical_change_since_1973_latitude", sep="_")]] <- cor.test(hist.melt.6$mean,as.numeric(hist.melt.6$CoordY.x))
 
 t.tests <- data.frame()
-for (month in unique(hist.melt.6$month_record.x)){
-  for (latitude in unique(hist.melt.6$CoordY.x)){
-  sub_difference <- hist.melt5[hist.melt5$CoordY.x==latitude & hist.melt5$month_record.x==month,"difference"]
-  test <- wilcox.test(sub_difference,mu=0,alternative="two.sided")
-  t.tests <- rbind(t.tests,data.frame(CoordY.x=latitude, month_record.y=month, p.value = round(test$p.value, digits=3), est=test$statistic, mean=mean(sub_difference), max=max(sub_difference), min=min(sub_difference)))
+for (month in unique(hist.melt5$month_record.x)){
+  for (latitude in unique(hist.melt5$CoordY.x)){
+    sub_difference <- hist.melt5[hist.melt5$CoordY.x==latitude & hist.melt5$month_record.x==month,"difference"]
+    test <- wilcox.test(sub_difference,mu=0,alternative="two.sided")
+    t.tests <- rbind(t.tests,data.frame(CoordY.x=latitude, 
+                                        month_record.y=month, 
+                                        p.value = round(test$p.value, digits=3), 
+                                        est=test$statistic, 
+                                        mean=mean(sub_difference), 
+                                        max=max(sub_difference), 
+                                        min=min(sub_difference),
+                                        ue= quantile(sub_difference, probs = 1),
+                                        le= quantile(sub_difference, probs = 0),
+                                        ue2= median(sub_difference)+ 1.58*IQR(sub_difference)/sqrt(length(sub_difference)),
+                                        le2= median(sub_difference)- 1.58*IQR(sub_difference)/sqrt(length(sub_difference))
+    ))
+    # lower edge of notch = median - 1.58 * IQR / sqrt(n).
+    # upper edge of notch = median + 1.58 * IQR / sqrt(n).
+  
 }}
 
 t.tests$signif2 <- substr(as.character(t.tests$mean),1,1)
 t.tests$signif2[t.tests$signif2!="-"]<-"+"
+
 
 t.tests$signif <- ""
 for (i in 1:length(t.tests$p.value)){
@@ -104,14 +121,15 @@ if(t.tests$p.value[i] < 0.001){
 }
 
 test_results[[paste(measure,"historical_change_since_1973_within", sep="_")]] <- t.tests
+hist.melt6 <- merge(hist.melt5,t.tests, by=c("CoordY.x","month_record.y"))
 
 pdf(paste("plots.supplement/",measure,"_historical_1973.pdf",sep=""), width=8, height=6)
-plot <- ggplot(hist.melt5,aes(y=difference,x=CoordY.x, col=as.factor(CoordY.x)))+
+plot <- ggplot(hist.melt6,aes(y=difference,x=CoordY.x, col=as.factor(CoordY.x)))+
   annotate("rect", xmin = min(t.tests$lat)-1, xmax =  max(t.tests$lat)+1, ymin = 0, ymax = ymin,
            alpha = .4,fill = "steelblue")+
   facet_wrap(month_record.y~.)+
-  geom_boxplot()+
-  geom_hline(yintercept=0)+
+  geom_hline(yintercept=0,linewidth=1, col="red")+
+  geom_boxplot(outlier.shape = NA)+
   geom_smooth(aes(y=difference,x=CoordY.x), inherit.aes = F, col="black", method="loess")+
   #geom_point(alpha=0.2,size=1)+
   #facet_wrap(month_record.x ~.)+
@@ -119,12 +137,15 @@ plot <- ggplot(hist.melt5,aes(y=difference,x=CoordY.x, col=as.factor(CoordY.x)))
   xlab("Latitude") + ylab(paste(measure,"difference since 1973"))+
   scale_y_continuous(breaks=breaks_plot)+
   scale_x_continuous(expand=c(0,0))+
-  scale_color_viridis(discrete=T)
+  scale_color_viridis(discrete=T) + 
+  theme(panel.margin.y = unit(0, "lines"),
+                                         strip.background =element_rect(fill="white"),
+                                         panel.grid.minor = element_blank())
   
-plot <- plot + geom_text(data=t.tests,aes(y = min(hist.melt5$difference)-1, label=signif),inherit.aes = T,lineheight = .25)#+
+plot <- plot + geom_text(aes(x=CoordY.x, y=le-ymin2, label=signif),inherit.aes = T,lineheight = .25)#+
 #  facet_wrap(month_record.y~.)
   
-plot +  geom_text(data=t.tests,aes(y = max(hist.melt5$difference)+1, label=signif2),inherit.aes = T)#+
+plot +  geom_text(aes(y = ue+ymin2, label=signif2),inherit.aes = T)#+
 #  facet_wrap(month_record.y~.)
 #xlim(1900,2023)
 dev.off()

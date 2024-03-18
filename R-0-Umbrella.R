@@ -68,7 +68,6 @@ source("Rscript/R-6-TemporalProgression.R", print.eval=TRUE)
 # Calculate Resistance and Resilience
 source("Rscript/R-7-ResistanceResilience.R", print.eval=TRUE)
 
-# RESI RESI ERROR CURRENTLY maybe because of switch - data.map to samples not yet complete
 
 # Historical changes
 measure="Temperature"
