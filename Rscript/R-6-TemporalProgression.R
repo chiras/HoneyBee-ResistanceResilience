@@ -41,7 +41,7 @@ if(toAnalyze == "results.prec" ){
 ##### full
 pdf(paste(toAnalyze,"season_q90_distribution_full.pdf",sep="/"), width=15, height=10)
 ggplot(prediction.season2, aes(x=as.numeric(month),y=accumulated, col=factor(coordY2),fill=factor(coordY2)))+
-  geom_smooth(data = prediction.season2 %>% group_by(coordY2, temp_increase) %>% filter(n() > 50), method = "loess", se=T) + 
+  geom_smooth(data = prediction.season2 %>% group_by(coordY2, temp_increase) %>% filter(n() > 70), method = "loess", se=T) + 
   facet_wrap(temp_increase2~., ncol=6)+
   coord_cartesian(ylim=c(0, 1))+
   scale_color_viridis(discrete=T, option = "viridis")+ # , end=0.8
@@ -58,10 +58,16 @@ dev.off()
 ##### subset
 
 prediction.season2.1 <- prediction.season2[prediction.season2$temp_increase %in% subset_levels,] 
+#prediction.season2.1 %>% expand(site, nesting(month, coordY2, temp_increase2), fill=-1)
+#names(prediction.season2.1)[3]<-"month2"
+#prediction.season2.2 <- complete(data.frame(prediction.season2.1), site, coordY2, temp_increase2, month2,fill = list(accumulated=0))
+
+
 
 pdf(paste(toAnalyze,"season_q90_distribution_sub.pdf",sep="/"), width=10, height=3)
 ggplot(prediction.season2.1, aes(x=as.numeric(month),y=accumulated, col=factor(coordY2),fill=factor(coordY2)))+
-  geom_smooth(data = prediction.season2.1 %>% group_by(coordY2, temp_increase) %>% filter(n() > 25), method = "loess", se=T) + 
+  #geom_smooth(method = "loess", se=T) + 
+  geom_smooth(data = prediction.season2.1 %>% group_by(coordY2, temp_increase) %>% filter(n() > 70), method = "loess", se=T) + 
   facet_wrap(temp_increase2~., ncol=6)+
   coord_cartesian(ylim=c(0, 1))+
   scale_color_viridis(discrete=T, option = "viridis")+ #, end=0.8
@@ -84,4 +90,15 @@ file.copy(paste(toAnalyze,"season_q90_distribution_full.pdf",sep="/"), paste("pl
 
 options(warn = oldw)
 
-# ANOVA prediction.season2.1
+# LM prediction.season2.1
+# at risk model
+prediction.at.risk <- prediction.season[prediction.season$prediction != criterion,]
+prediction.at.risk <- prediction.at.risk %>%
+  group_by(coordY,temp_increase,month, site) %>%
+  summarize(accumulated.rel = sum(abundance, na.rm=T))
+
+#res.man <- step(lm(accumulated.rel ~ as.numeric(coordY)+as.numeric(coordY):as.numeric(temp_increase)+as.numeric(temp_increase), data = prediction.at.risk ))
+res.man <- step(lm(accumulated.rel ~ as.numeric(month)+as.numeric(month):as.numeric(temp_increase)+as.numeric(coordY)+as.numeric(temp_increase):as.numeric(coordY)+as.numeric(temp_increase), data = prediction.at.risk ))
+
+test_results[[paste(toAnalyze,"model.risk", sep=".")]] <- summary(res.man)
+# avPlots(res.man)

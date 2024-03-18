@@ -148,4 +148,15 @@ file.copy(paste(toAnalyze,"taxa_loss_abundance_latitude_full.pdf",sep="/"), past
 
 options(warn = oldw)
 
+# at risk model
+prediction.at.risk <- prediction2[prediction2$prediction != criterion,]
+prediction.at.risk <- prediction.at.risk %>%
+  group_by(coordY,temp_increase2) %>%
+  summarize(accumulated.rel = sum(accumulated.rel, na.rm=T))
+
+res.man <- step(lm(accumulated.rel ~ as.numeric(coordY)+as.numeric(coordY):as.numeric(temp_increase2)+as.numeric(temp_increase2), data = prediction.at.risk))
+summary(res.man)
+avPlots(res.man)
+
+
 ##  repeat from return point 1 for precipitation

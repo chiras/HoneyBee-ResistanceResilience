@@ -67,7 +67,7 @@ colnames(geodist) <- rownames(sample_data(samples))
 data.map$site = interaction(data.map$CoordY, data.map$CoordX, sep = "-" )
 pb <- txtProgressBar(0, length(data.map$site ), style = 3)
 
-sites <- unique(rownames(data.map))
+sites <- unique(rownames(sample_data(samples)))
 distance.geo <- foreach(sample=sites, .options.snow=opts , .combine="cbind",  .packages=c("phyloseq","tidyr","speedyseq","dplyr")) %dopar% {
   plant.qs = matrix(nrow = length(plant_taxa), ncol=1)
   colnames(plant.qs)[1] <- sample
