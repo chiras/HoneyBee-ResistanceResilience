@@ -9,6 +9,3 @@ tmp.*
 /tmp*
 /.Rhistory
 /*.pdf
-/plots
-/plots.supplement
-/*/*.pdf
