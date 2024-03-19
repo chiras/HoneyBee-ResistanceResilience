@@ -39,7 +39,7 @@ if(toAnalyze == "results.prec" ){
 }
 
 ##### full
-pdf(paste(toAnalyze,"season_q90_distribution_full.pdf",sep="/"), width=15, height=10)
+pdf(paste(toAnalyze,"season_q90_distribution_full.pdf",sep="/"), width=15, height=6)
 ggplot(prediction.season2, aes(x=as.numeric(month),y=accumulated, col=factor(coordY2),fill=factor(coordY2)))+
   geom_smooth(data = prediction.season2 %>% group_by(coordY2, temp_increase) %>% filter(n() > 70), method = "loess", se=T) + 
   facet_wrap(temp_increase2~., ncol=6)+

@@ -27,7 +27,7 @@ hist.melt4 <- merge(hist.melt3, hist.melt3.current,by=c("BK","month_sample"))
 hist.melt4$year_record <- as.numeric(hist.melt4$year_record.x)
 
 # historical change over years 
-pdf(paste("plots.supplement/",measure,"_historical_change.pdf",sep=""), width=8, height=6)
+pdf(paste("plots.supplement/",measure,"_historical_change.pdf",sep=""), width=5, height=4)
 ggplot(hist.melt4,aes(y=value.x,x=year_record, col=as.factor(CoordY.y)))+
   geom_smooth(method="loess",n=100, aes(fill=as.factor(CoordY.y)), alpha=0.25)+
   geom_smooth(method="loess",n=100, se=F)+
@@ -38,7 +38,8 @@ ggplot(hist.melt4,aes(y=value.x,x=year_record, col=as.factor(CoordY.y)))+
   scale_fill_viridis(discrete=T, option="turbo", direction=-1, alpha=0.1)+
  # scale_color_viridis(discrete=T)+ #, end=0.8
  # scale_fill_viridis(discrete=T)+ #, end=0.8
-  xlim(1900,2023)
+  xlim(1900,2023)+
+  xlab("Time") + ylab(paste("Monthly average",measure, sep=" "))
 dev.off()
 
 # difference between 2023 and 1973
@@ -70,7 +71,7 @@ ggplot(hist.melt5,aes(y=difference,x=CoordY.x, fill=as.factor(CoordY.x)))+
   #geom_point(alpha=0.2,size=1)+
   facet_wrap(month_record.x ~.)+
   theme_bw()+
-  xlab("Latitude") + ylab(paste(measure,"difference since 1973"))+
+  xlab("Latitude") + ylab(paste(measure,"difference vs. 1970-1975"))+
   scale_y_continuous(breaks=breaks_plot)+
   #scale_color_viridis(discrete=T)#+
   scale_color_viridis(discrete=T, option="turbo", direction=-1)+
@@ -123,33 +124,42 @@ if(t.tests$p.value[i] < 0.001){
 }
 }
 
+
+
 test_results[[paste(measure,"historical_change_since_1973_within", sep="_")]] <- t.tests
 hist.melt6 <- merge(hist.melt5,t.tests, by=c("CoordY.x","month_record.y"))
+
+hist.melt6$month_sample[hist.melt6$month_sample=="05"] <- "May"
+hist.melt6$month_sample[hist.melt6$month_sample=="06"] <- "June"
+hist.melt6$month_sample[hist.melt6$month_sample=="07"] <- "July"
+hist.melt6$month_sample[hist.melt6$month_sample=="08"] <- "August"
+
+hist.melt6$month_sample <- ordered(factor(hist.melt6$month_sample, levels = c("May", "June", "July","August")))
 
 pdf(paste("plots.supplement/",measure,"_historical_1973.pdf",sep=""), width=8, height=6)
 plot <- ggplot(hist.melt6,aes(y=difference,x=CoordY.x, fill=as.factor(CoordY.x)))+
   annotate("rect", xmin = min(t.tests$lat)-1, xmax =  max(t.tests$lat)+1, ymin = 0, ymax = ymin,
            alpha = .4,fill = "steelblue")+
-  facet_wrap(month_record.y~.)+
+  facet_wrap(month_sample~.)+
   geom_hline(yintercept=0,linewidth=1, col="red")+
   geom_boxplot(linewidth=0.2, outlier.size=0.1)+
   geom_smooth(aes(y=difference,x=CoordY.x), inherit.aes = F, col="black", method="loess")+
   #geom_point(alpha=0.2,size=1)+
   #facet_wrap(month_record.x ~.)+
   theme_bw()+
-  xlab("Latitude") + ylab(paste(measure,"difference since 1973"))+
+  xlab("Latitude") + ylab(paste(measure,"difference vs. 1970-1975"))+
   scale_y_continuous(breaks=breaks_plot)+
   scale_x_continuous(expand=c(0,0))+
-  scale_color_viridis(discrete=F, option="turbo", direction=-1)+
-  scale_fill_viridis(discrete=F, option="turbo", direction=-1)+
+  scale_color_viridis(discrete=T, option="turbo", direction=-1)+
+  scale_fill_viridis(discrete=T, option="turbo", direction=-1)+
   theme(panel.margin.y = unit(0, "lines"),
                                          strip.background =element_rect(fill="white"),
                                          panel.grid.minor = element_blank())
   
-plot <- plot + geom_text(aes(x=CoordY.x, y=le-ymin2, label=signif),inherit.aes = T,lineheight = .25)#+
+plot <- plot + geom_text(aes(x=CoordY.x, y=le-ymin2, label=signif),inherit.aes = T,lineheight = .5, size=3)#+
 #  facet_wrap(month_record.y~.)
   
-plot +  geom_text(aes(y = ue+ymin2, label=signif2),inherit.aes = T)#+
+plot +  geom_text(aes(y = ue+ymin2, label=signif2),inherit.aes = T, size=3)#+
 #  facet_wrap(month_record.y~.)
 #xlim(1900,2023)
 dev.off()
