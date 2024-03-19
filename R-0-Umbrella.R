@@ -56,7 +56,7 @@ source("Rscript/R-2-DiversityMap.R", print.eval=TRUE)
 source("Rscript/R-3-EstimateDistributions.R")
 source("Rscript/R-4-EstimateScenariosAbundance.R")
 
-# Analyse risks
+# Analyse risks (CHK)
 toAnalyze = "results.temp" 
 source("Rscript/R-5-EstimateScenariosAbundanceII.R", print.eval=TRUE)
 source("Rscript/R-6-TemporalProgression.R", print.eval=TRUE)
@@ -65,11 +65,11 @@ toAnalyze = "results.prec"
 source("Rscript/R-5-EstimateScenariosAbundanceII.R", print.eval=TRUE)
 source("Rscript/R-6-TemporalProgression.R", print.eval=TRUE)
 
-# Calculate Resistance and Resilience
+# Calculate Resistance and Resilience (CHK)
 source("Rscript/R-7-ResistanceResilience.R", print.eval=TRUE)
+source("Rscript/R-7.1-ResistanceResiliencePlot.R", print.eval=TRUE)
 
-
-# Historical changes
+# Historical changes (CHK)
 measure="Temperature"
 source("Rscript/R-8-HistoricalChanges.R", print.eval=TRUE)
 
@@ -82,28 +82,28 @@ names(test_results)
 
 # Historical Temperature min and max
 # southern
-mean(test_results$Temperature_historical_change_since_1973_within[test_results$Temperature_historical_change_since_1973_within$lat < 45,"mean"])
-max(mean(test_results$Temperature_historical_change_since_1973_within[test_results$Temperature_historical_change_since_1973_within$lat < 45,"max"]))
+mean(test_results$Temperature_historical_change_since_1973_within[test_results$Temperature_historical_change_since_1973_within$CoordY.x  < 45,"mean"])
+max(mean(test_results$Temperature_historical_change_since_1973_within[test_results$Temperature_historical_change_since_1973_within$CoordY.x  < 45,"max"]))
 
 # central
-mean(test_results$Temperature_historical_change_since_1973_within[test_results$Temperature_historical_change_since_1973_within$lat > 45 & test_results$Temperature_historical_change_since_1973_within$lat < 54,"mean"])
-max(mean(test_results$Temperature_historical_change_since_1973_within[test_results$Temperature_historical_change_since_1973_within$lat > 45 & test_results$Temperature_historical_change_since_1973_within$lat < 54,"max"]))
+mean(test_results$Temperature_historical_change_since_1973_within[test_results$Temperature_historical_change_since_1973_within$CoordY.x  > 45 & test_results$Temperature_historical_change_since_1973_within$CoordY.x < 54,"mean"])
+max(mean(test_results$Temperature_historical_change_since_1973_within[test_results$Temperature_historical_change_since_1973_within$CoordY.x  > 45 & test_results$Temperature_historical_change_since_1973_within$CoordY.x < 54,"max"]))
 
 # northern
-mean(test_results$Temperature_historical_change_since_1973_within[test_results$Temperature_historical_change_since_1973_within$lat > 54,"mean"])
-max(mean(test_results$Temperature_historical_change_since_1973_within[test_results$Temperature_historical_change_since_1973_within$lat > 54,"max"]))
+mean(test_results$Temperature_historical_change_since_1973_within[test_results$Temperature_historical_change_since_1973_within$CoordY.x  > 54,"mean"])
+max(mean(test_results$Temperature_historical_change_since_1973_within[test_results$Temperature_historical_change_since_1973_within$CoordY.x  > 54,"max"]))
 
 # Precipitation 
 # southern
-diff(range(test_results$Precipitation_historical_change_since_1973_within[test_results$Precipitation_historical_change_since_1973_within$lat < 45,c("min","max")]))
-min(test_results$Precipitation_historical_change_since_1973_within[test_results$Precipitation_historical_change_since_1973_within$lat < 45,"min"])
+diff(range(test_results$Precipitation_historical_change_since_1973_within[test_results$Precipitation_historical_change_since_1973_within$CoordY.x  < 45,c("min","max")]))
+min(test_results$Precipitation_historical_change_since_1973_within[test_results$Precipitation_historical_change_since_1973_within$CoordY.x  < 45,"min"])
 
 # central
-diff(range(test_results$Precipitation_historical_change_since_1973_within[test_results$Precipitation_historical_change_since_1973_within$lat > 45 & test_results$Precipitation_historical_change_since_1973_within$lat < 54,c("min","max")]))
-min(test_results$Precipitation_historical_change_since_1973_within[test_results$Precipitation_historical_change_since_1973_within$lat > 45 & test_results$Precipitation_historical_change_since_1973_within$lat < 54,"min"])
+diff(range(test_results$Precipitation_historical_change_since_1973_within[test_results$Precipitation_historical_change_since_1973_within$CoordY.x  > 45 & test_results$Precipitation_historical_change_since_1973_within$CoordY.x < 54,c("min","max")]))
+min(test_results$Precipitation_historical_change_since_1973_within[test_results$Precipitation_historical_change_since_1973_within$CoordY.x  > 45 & test_results$Precipitation_historical_change_since_1973_within$CoordY.x < 54,"min"])
 
 # northern
-diff(range(test_results$Precipitation_historical_change_since_1973_within[test_results$Precipitation_historical_change_since_1973_within$lat > 54,c("min","max")]))
-min(test_results$Precipitation_historical_change_since_1973_within[test_results$Precipitation_historical_change_since_1973_within$lat > 54,"min"])
+diff(range(test_results$Precipitation_historical_change_since_1973_within[test_results$Precipitation_historical_change_since_1973_within$CoordY.x  > 54,c("min","max")]))
+min(test_results$Precipitation_historical_change_since_1973_within[test_results$Precipitation_historical_change_since_1973_within$CoordY.x  > 54,"min"])
 
 

@@ -19,7 +19,7 @@ prediction.season2 <- prediction.season %>%
   group_by(coordY,temp_increase, month,site) %>%
   summarize(accumulated = sum(abundance, na.rm=T))
 
-prediction.season2$coordY2 = round(prediction.season2$coordY*2/10, digits=0)*5
+prediction.season2$coordY2 = round(prediction.season2$coordY/2, digits=0)*2
 
 
 #fit <- loess(accumulated~as.numeric(month)+coordY2,data=prediction.season2)
@@ -41,16 +41,14 @@ if(toAnalyze == "results.prec" ){
 ##### full
 pdf(paste(toAnalyze,"season_q90_distribution_full.pdf",sep="/"), width=15, height=6)
 ggplot(prediction.season2, aes(x=as.numeric(month),y=accumulated, col=factor(coordY2),fill=factor(coordY2)))+
-  geom_smooth(data = prediction.season2 %>% group_by(coordY2, temp_increase) %>% filter(n() > 70), method = "loess", se=T) + 
+  geom_smooth(data = prediction.season2 %>% group_by(coordY2, temp_increase) %>% filter(n() > 75), method = "loess", se=T,alpha = 0.1) + 
   facet_wrap(temp_increase2~., ncol=6)+
   coord_cartesian(ylim=c(0, 1))+
-  #scale_color_viridis(discrete=T, option = "viridis")+ # , end=0.8
-  #scale_fill_viridis(discrete=T, option = "viridis", alpha=0.1)+ #, end=0.8
   scale_color_viridis(discrete=T, option="turbo", direction=-1)+
-  scale_fill_viridis(discrete=T, option="turbo", direction=-1, alpha=0.1)+
+  scale_fill_viridis(discrete=T, option="turbo", direction=-1, alpha=0.01)+
   theme_bw()+
-  scale_x_continuous(breaks = 5:8, expand = c(0, 0.2))+
-  scale_y_continuous(expand = c(0, 0))+
+  #scale_x_continuous(breaks = 5:8, expand = c(0, 0.2))+
+  #scale_y_continuous(expand = c(0, 0))+
   ylab(ylabel) + xlab("Month")+
   theme(panel.margin.y = unit(0, "lines"),
         strip.background =element_rect(fill="white"),
@@ -60,32 +58,25 @@ dev.off()
 ##### subset
 
 prediction.season2.1 <- prediction.season2[prediction.season2$temp_increase %in% subset_levels,] 
-
-prediction.season2.1$site <- factor(prediction.season2.1$site)
 prediction.season2.1$temp_increase2 <- factor(prediction.season2.1$temp_increase2)
-prediction.season2.1$month <- factor(prediction.season2.1$month)
-prediction.season2.1$coordY2 <- factor(prediction.season2.1$coordY2)
+#prediction.season2.1$site <- factor(prediction.season2.1$site)
+#prediction.season2.1$month <- factor(prediction.season2.1$month)
 
-pdf(paste(toAnalyze,"season_q90_distribution_sub.pdf",sep="/"), width=10, height=3)
+pdf(paste(toAnalyze,"season_q90_distribution_sub.pdf",sep="/"), width=15, height=3)
 ggplot(prediction.season2.1, aes(x=as.numeric(month),y=accumulated, col=factor(coordY2),fill=factor(coordY2)))+
-  #geom_smooth(method = "loess", se=T) + 
-  geom_smooth(data = prediction.season2.1 %>% group_by(coordY2, temp_increase) %>% filter(n() > 70), method = "loess", se=T) + 
+ # geom_smooth(method = "loess", se=T,alpha = 0.1) + 
+  geom_smooth(data = prediction.season2.1 %>% group_by(coordY2, temp_increase) %>% filter(n() > 75), method = "loess", se=T,alpha = 0.1) + 
   facet_wrap(temp_increase2~., ncol=6)+
   coord_cartesian(ylim=c(0, 1))+
-  #scale_color_viridis(discrete=T, option = "viridis")+ #, end=0.8
-  #scale_fill_viridis(discrete=T, option = "viridis", alpha=0.1)+ #, end=0.8
   scale_color_viridis(discrete=T, option="turbo", direction=-1)+
-  scale_fill_viridis(discrete=T, option="turbo", direction=-1, alpha=0.1)+
+  scale_fill_viridis(discrete=T, option="turbo", direction=-1, alpha=0.01)+
   theme_bw()+
-  scale_x_continuous(breaks = 5:8, expand = c(0, 0.2))+
-  scale_y_continuous(expand = c(0, 0))+
+  #scale_x_continuous(breaks = 5:8, expand = c(0, 0.2))+
+  #scale_y_continuous(expand = c(0, 0))+
+  ylab(ylabel) + xlab("Month")+
   theme(panel.margin.y = unit(0, "lines"),
         strip.background =element_rect(fill="white"),
-        panel.grid.minor = element_blank())+ 
-  theme(legend.position="bottom")+  
-  ylab(ylabel) + xlab("Month")+
-  guides(fill = guide_legend(nrow = 1, byrow = TRUE))
-  
+        panel.grid.minor = element_blank())
 dev.off()   
 
 file.copy(paste(toAnalyze,"season_q90_distribution_sub.pdf",sep="/"), paste("plots",paste(toAnalyze,"season_q90_distribution_sub.pdf", sep="."),sep="/"))
