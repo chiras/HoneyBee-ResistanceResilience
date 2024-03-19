@@ -1,4 +1,14 @@
 /.DS_Store
 tmp.*
 /Data/total.asv_table.bytable.sed.txt
+/Data/total.asv_table.bytable.sed.txt
 /Data/total.taxonomy.sed.vsearch
+/Data/__MACOSX
+/results.prec
+/results.temp
+/tmp*
+/.Rhistory
+/*.pdf
+/plots
+/plots.supplement
+/*/*.pdf
