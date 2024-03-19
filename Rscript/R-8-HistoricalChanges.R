@@ -34,8 +34,10 @@ ggplot(hist.melt4,aes(y=value.x,x=year_record, col=as.factor(CoordY.y)))+
   #geom_point(alpha=0.2,size=1)+
   #facet_wrap(month_record.x ~.)+
   theme_bw()+
-  scale_color_viridis(discrete=T)+ #, end=0.8
-  scale_fill_viridis(discrete=T)+ #, end=0.8
+  scale_color_viridis(discrete=T, option="turbo", direction=-1)+
+  scale_fill_viridis(discrete=T, option="turbo", direction=-1, alpha=0.1)+
+ # scale_color_viridis(discrete=T)+ #, end=0.8
+ # scale_fill_viridis(discrete=T)+ #, end=0.8
   xlim(1900,2023)
 dev.off()
 
@@ -62,16 +64,17 @@ if(measure=="Temperature"){
 hist.melt5$difference<- -hist.melt5$difference
 
 pdf(paste("plots.supplement/",measure,"_historical_1973.pdf",sep=""), width=8, height=6)
-ggplot(hist.melt5,aes(y=difference,x=CoordY.x, col=as.factor(CoordY.x)))+
-  geom_boxplot()+
+ggplot(hist.melt5,aes(y=difference,x=CoordY.x, fill=as.factor(CoordY.x)))+
+  geom_boxplot(linewidth=0.2, outlier.size=0.1)+
   geom_smooth(aes(y=difference,x=CoordY.x), inherit.aes = F, col="black", method="loess")+
   #geom_point(alpha=0.2,size=1)+
   facet_wrap(month_record.x ~.)+
   theme_bw()+
   xlab("Latitude") + ylab(paste(measure,"difference since 1973"))+
   scale_y_continuous(breaks=breaks_plot)+
-  scale_color_viridis(discrete=T)#+
-  #xlim(1900,2023)
+  #scale_color_viridis(discrete=T)#+
+  scale_color_viridis(discrete=T, option="turbo", direction=-1)+
+  scale_fill_viridis(discrete=T, option="turbo", direction=-1, alpha=0.75)
 dev.off()
 
 hist.melt.6 <- hist.melt5 %>%
@@ -124,12 +127,12 @@ test_results[[paste(measure,"historical_change_since_1973_within", sep="_")]] <-
 hist.melt6 <- merge(hist.melt5,t.tests, by=c("CoordY.x","month_record.y"))
 
 pdf(paste("plots.supplement/",measure,"_historical_1973.pdf",sep=""), width=8, height=6)
-plot <- ggplot(hist.melt6,aes(y=difference,x=CoordY.x, col=as.factor(CoordY.x)))+
+plot <- ggplot(hist.melt6,aes(y=difference,x=CoordY.x, fill=as.factor(CoordY.x)))+
   annotate("rect", xmin = min(t.tests$lat)-1, xmax =  max(t.tests$lat)+1, ymin = 0, ymax = ymin,
            alpha = .4,fill = "steelblue")+
   facet_wrap(month_record.y~.)+
   geom_hline(yintercept=0,linewidth=1, col="red")+
-  geom_boxplot(outlier.shape = NA)+
+  geom_boxplot(linewidth=0.2, outlier.size=0.1)+
   geom_smooth(aes(y=difference,x=CoordY.x), inherit.aes = F, col="black", method="loess")+
   #geom_point(alpha=0.2,size=1)+
   #facet_wrap(month_record.x ~.)+
@@ -137,7 +140,8 @@ plot <- ggplot(hist.melt6,aes(y=difference,x=CoordY.x, col=as.factor(CoordY.x)))
   xlab("Latitude") + ylab(paste(measure,"difference since 1973"))+
   scale_y_continuous(breaks=breaks_plot)+
   scale_x_continuous(expand=c(0,0))+
-  scale_color_viridis(discrete=T) + 
+  scale_color_viridis(discrete=F, option="turbo", direction=-1)+
+  scale_fill_viridis(discrete=F, option="turbo", direction=-1)+
   theme(panel.margin.y = unit(0, "lines"),
                                          strip.background =element_rect(fill="white"),
                                          panel.grid.minor = element_blank())

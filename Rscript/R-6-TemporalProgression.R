@@ -44,8 +44,10 @@ ggplot(prediction.season2, aes(x=as.numeric(month),y=accumulated, col=factor(coo
   geom_smooth(data = prediction.season2 %>% group_by(coordY2, temp_increase) %>% filter(n() > 70), method = "loess", se=T) + 
   facet_wrap(temp_increase2~., ncol=6)+
   coord_cartesian(ylim=c(0, 1))+
-  scale_color_viridis(discrete=T, option = "viridis")+ # , end=0.8
-  scale_fill_viridis(discrete=T, option = "viridis", alpha=0.1)+ #, end=0.8
+  #scale_color_viridis(discrete=T, option = "viridis")+ # , end=0.8
+  #scale_fill_viridis(discrete=T, option = "viridis", alpha=0.1)+ #, end=0.8
+  scale_color_viridis(discrete=T, option="turbo", direction=-1)+
+  scale_fill_viridis(discrete=T, option="turbo", direction=-1, alpha=0.1)+
   theme_bw()+
   scale_x_continuous(breaks = 5:8, expand = c(0, 0.2))+
   scale_y_continuous(expand = c(0, 0))+
@@ -70,8 +72,10 @@ ggplot(prediction.season2.1, aes(x=as.numeric(month),y=accumulated, col=factor(c
   geom_smooth(data = prediction.season2.1 %>% group_by(coordY2, temp_increase) %>% filter(n() > 70), method = "loess", se=T) + 
   facet_wrap(temp_increase2~., ncol=6)+
   coord_cartesian(ylim=c(0, 1))+
-  scale_color_viridis(discrete=T, option = "viridis")+ #, end=0.8
-  scale_fill_viridis(discrete=T, option = "viridis", alpha=0.1)+ #, end=0.8
+  #scale_color_viridis(discrete=T, option = "viridis")+ #, end=0.8
+  #scale_fill_viridis(discrete=T, option = "viridis", alpha=0.1)+ #, end=0.8
+  scale_color_viridis(discrete=T, option="turbo", direction=-1)+
+  scale_fill_viridis(discrete=T, option="turbo", direction=-1, alpha=0.1)+
   theme_bw()+
   scale_x_continuous(breaks = 5:8, expand = c(0, 0.2))+
   scale_y_continuous(expand = c(0, 0))+

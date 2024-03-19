@@ -31,12 +31,13 @@ dev.off()
 
 ### plot diversity & latitiude 
 
-pdf("plots.supplement/diversity_latitude_quadratic.pdf", width=5.5, height=5)
-ggplot(diversity, aes(y=Shannon, x=CoordY, col=CoordY))+
-  geom_boxplot(aes(group=as.factor(CoordY)))+
+pdf("plots.supplement/diversity_latitude_quadratic_5.pdf", width=5.5, height=5)
+ggplot(diversity, aes(y=Shannon, x=CoordY, fill=CoordY))+
+ geom_boxplot(aes(group=as.factor(CoordY)), linewidth=0.2, outlier.size=0.1)+
   #geom_point()+
   geom_smooth(method = "lm", formula = y ~ x + I(x^2), col="black")+
-  scale_color_viridis(discrete=F)+
+  scale_color_viridis(discrete=F, option="turbo", direction=-1)+
+  scale_fill_viridis(discrete=F, option="turbo", direction=-1)+
   theme_bw() +   
   xlab("Latitude") + ylab("Shannon's H Diversity")
 dev.off()

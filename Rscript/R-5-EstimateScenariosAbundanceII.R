@@ -106,7 +106,9 @@ ggplot(prediction2, aes(fill=iPC, shape=crop,y=accumulated.rel, alpha=crop, col=
   facet_grid(iCC ~temp_increase2, scales="free", drop=T)+ 
   coord_flip()+
   scale_fill_manual(values =c(cols))+
-  scale_color_viridis(option="viridis", discrete=T) + theme_bw()+ 
+  scale_color_viridis(option="viridis", discrete=T) + 
+  #scale_color_viridis(discrete=T, option="turbo", direction=-1)+ 
+  theme_bw()+
   scale_alpha_discrete(range = c(0.7, 1))+
   theme_bw()+ 
   theme(panel.margin.y = unit(0, "lines"),
@@ -137,7 +139,7 @@ ggplot(prediction2.1, aes(fill=iPC, shape=crop,y=accumulated.rel, alpha=crop, co
         strip.background =element_rect(fill="white"),
         axis.text.y=element_blank(),
         axis.ticks.y=element_blank())+
-  xlab("Latitude") + ylab("Proportion of pollen")+
+    xlab("Latitude") + ylab("Proportion of pollen")+
   scale_y_continuous(breaks = c(0,0.5))+
   scale_x_continuous(breaks = c(0,2)) + 
   theme(legend.position="bottom")
