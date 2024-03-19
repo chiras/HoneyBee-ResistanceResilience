@@ -16,8 +16,8 @@ ggplot(prediction.all.mean)+
   facet_grid(temp_increase2~prec_increase2)+
   scale_x_continuous(limits=c(0,1), breaks=c(0,0.5))+
   scale_y_continuous(limits=c(0,1), breaks=c(0,0.5,1))+
-  scale_color_viridis(option="inferno", direction=-1, begin=0, end=0.8)+ #, end=0.8
-   scale_fill_viridis(option="inferno", direction=-1, begin=0, end=0.8)+ #, end=0.8
+  scale_color_viridis(option="magma", direction=-1, begin=0)+ #, end=0.8
+  scale_fill_viridis(option="magma", direction=-1, begin=0)+ #, end=0.8
  theme_bw()+  #, end=0.8
   theme(panel.margin.y = unit(0, "lines"),
         strip.text.y = element_text(angle = 360, hjust = 0),
@@ -37,8 +37,8 @@ ggplot(prediction.all.mean2)+
   facet_grid(temp_increase2~prec_increase2)+
   scale_x_continuous(limits=c(0,1), breaks=c(0,0.5))+
   scale_y_continuous(limits=c(0,1), breaks=c(0,0.5,1))+
-  scale_color_viridis(option="inferno", direction=-1, begin=0, end=0.8)+ #, end=0.8
-  scale_fill_viridis(option="inferno", direction=-1, begin=0, end=0.8)+ #, end=0.8
+  scale_color_viridis(option="magma", direction=-1, begin=0)+ #, end=0.8
+  scale_fill_viridis(option="magma", direction=-1, begin=0)+ #, end=0.8
   theme_bw()+  
   theme(panel.margin.y = unit(0, "lines"),
         strip.text.y = element_text(angle = 360, hjust = 0),
@@ -84,7 +84,7 @@ plot +  geom_path(data=cline(0.25, intervall), aes(x=x,y=y), inherit.aes = F, co
   geom_path(data=cline(1.75, intervall), aes(x=x,y=y), inherit.aes = F, col="black", linewidth=1)+
   scale_x_continuous(limits=c(0,1), breaks=c(0,0.5,1))+
   scale_y_continuous(limits=c(0,1), breaks=c(0,0.5))+
-  scale_color_viridis(option="inferno", direction=-1, begin=0, end=0.8)+ #, end=0.8
+  scale_color_viridis(option="magma", direction=-1, begin=0)+ #, end=0.8
   theme_bw()+  
   labs(color = "Resistance Potential + Resilience Potential")+  
   theme(panel.margin.y = unit(0, "lines"),

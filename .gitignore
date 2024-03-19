@@ -9,3 +9,4 @@ tmp.*
 /tmp*
 /.Rhistory
 /*.pdf
+plots.supplement/resistance_resilience_legend.pdf
