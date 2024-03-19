@@ -58,11 +58,11 @@ dev.off()
 ##### subset
 
 prediction.season2.1 <- prediction.season2[prediction.season2$temp_increase %in% subset_levels,] 
-#prediction.season2.1 %>% expand(site, nesting(month, coordY2, temp_increase2), fill=-1)
-#names(prediction.season2.1)[3]<-"month2"
-#prediction.season2.2 <- complete(data.frame(prediction.season2.1), site, coordY2, temp_increase2, month2,fill = list(accumulated=0))
 
-
+prediction.season2.1$site <- factor(prediction.season2.1$site)
+prediction.season2.1$temp_increase2 <- factor(prediction.season2.1$temp_increase2)
+prediction.season2.1$month <- factor(prediction.season2.1$month)
+prediction.season2.1$coordY2 <- factor(prediction.season2.1$coordY2)
 
 pdf(paste(toAnalyze,"season_q90_distribution_sub.pdf",sep="/"), width=10, height=3)
 ggplot(prediction.season2.1, aes(x=as.numeric(month),y=accumulated, col=factor(coordY2),fill=factor(coordY2)))+

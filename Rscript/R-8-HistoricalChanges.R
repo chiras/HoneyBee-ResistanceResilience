@@ -53,7 +53,7 @@ if(measure=="Temperature"){
   ymin = 5
   ymin2 = 2.5
 }else{
-  breaks_plot=seq(-200,+200,20)
+  breaks_plot=seq(-200,+250,25)
   #-> positive numbers: decrease of Prec, negative numbers: increase of Prec over time
   hist.melt5$difference <- ((hist.melt5$value.x) - (hist.melt5$value.y))
   ymin = -25
