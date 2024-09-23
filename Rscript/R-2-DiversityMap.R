@@ -1,3 +1,5 @@
+oldw <- getOption("warn")
+options(warn = -1) # temporarily remove warnings, in case dir exists and graphics warnings
 
 ################################################
 # Data analysis 1 
@@ -67,7 +69,8 @@ ggplot(diversity, aes(y=ExpShannon, x=CoordY, fill=(CoordY)))+
                                          panel.grid.minor = element_blank())+
 
   ylab(bquote("Effective Diversity ("~e^H[2]~")"))+
-  xlab("Latitude")
+  xlab("Latitude")+  labs(fill = "Latitude")
+
 dev.off()
 
 test_results[["diversity_latitude_quadratic"]] <- summary(step(lm(exp(Shannon)~CoordY+I(CoordY^2)*Temp+Prec+as.numeric(month),data=diversity)))
@@ -75,3 +78,4 @@ test_results[["diversity_latitude_quadratic_5"]] <- summary(step(lm(exp(Shannon)
 test_results[["diversity_latitude_quadratic_6"]] <- summary(step(lm(exp(Shannon)~CoordY+I(CoordY^2),data=diversity[diversity$month=="June",])))
 test_results[["diversity_latitude_quadratic_7"]] <- summary(step(lm(exp(Shannon)~CoordY+I(CoordY^2),data=diversity[diversity$month=="July",])))
 test_results[["diversity_latitude_quadratic_8"]] <- summary(step(lm(exp(Shannon)~CoordY+I(CoordY^2),data=diversity[diversity$month=="August",])))
+options(warn = oldw)
