@@ -46,6 +46,7 @@ plant.temp2 <-foreach (plant_i = 1:length(plant_taxa), .combine=rbind, .options.
   # Calculate endemism
   countries <- length(data.frame(table(target.melt$Country))[,1])
   sites <- length(data.frame(table(target.melt$location))[,1])
+  sites2 <- length(unique(target.melt$location))
 
   # Check whether it is a crop
   crop <- plant %in% crops$V1 
@@ -108,6 +109,7 @@ plant.temp2 <-foreach (plant_i = 1:length(plant_taxa), .combine=rbind, .options.
                       crop = crop,
                       countries = countries,
                       sites = sites,
+                      sites2 = sites2,
                       temp.mean = mean.temp, 
                       temp.sd = sd.temp,
                       temp.median= median(dist.temp),
@@ -137,3 +139,7 @@ stopCluster(cl)
 
 plant.temp <- plant.temp2 # when using parallelization
 write.table(plant.temp, file="tmp.plant.csv", sep=",")
+
+plant.temp.qualified <- plant.temp[plant.temp$sites > 10,]
+write.table(plant.temp.qualified, file="plant_niche_distributions.csv", sep=",")
+
