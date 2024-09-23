@@ -56,7 +56,7 @@ source("Rscript/R-2-DiversityMap.R", print.eval=TRUE)
 source("Rscript/R-3-EstimateDistributions.R")
 source("Rscript/R-4-EstimateScenariosAbundance.R")
 
-# Analyse risks (CHK)
+# Analyse risks
 toAnalyze = "results.temp" 
 source("Rscript/R-5-EstimateScenariosAbundanceII.R", print.eval=TRUE)
 source("Rscript/R-6-TemporalProgression.R", print.eval=TRUE)
@@ -65,7 +65,7 @@ toAnalyze = "results.prec"
 source("Rscript/R-5-EstimateScenariosAbundanceII.R", print.eval=TRUE)
 source("Rscript/R-6-TemporalProgression.R", print.eval=TRUE)
 
-# Calculate Resistance and Resilience (CHK)
+# Calculate Resistance and Resilience 
 source("Rscript/R-7-ResistanceResilience.R", print.eval=TRUE)
 source("Rscript/R-7.1-ResistanceResiliencePlot.R", print.eval=TRUE)
 
@@ -76,7 +76,10 @@ source("Rscript/R-8-HistoricalChanges.R", print.eval=TRUE)
 measure="Precipitation"
 source("Rscript/R-8-HistoricalChanges.R", print.eval=TRUE)
 
-# Statistics
+measure="Precipitation"
+source("Rscript/R-9_GDMs.R", print.eval=TRUE)
+
+# Further statistics
 
 names(test_results)
 

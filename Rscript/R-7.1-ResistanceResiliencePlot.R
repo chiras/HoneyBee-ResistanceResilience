@@ -51,8 +51,37 @@ ggplot(prediction.all.mean2)+
 
 dev.off()
 
+pdf("resistance_resilience_sub_curves.pdf", width=7, height=8)
+prediction.all.mean2 <- prediction.all.mean[prediction.all.mean$temp_increase %in% 1:5 & prediction.all.mean$prec_increase %in% c(10,20,30,40),]
+prediction.all.mean2$resiresi =  prediction.all.mean2$mean.resilience.dropouts+prediction.all.mean2$mean.resistance
+prediction.all.mean2$resiresi_scaled = rescale(prediction.all.mean2$resiresi, to = c(0, 1))
+
+ggplot(prediction.all.mean2)+
+  geom_point(aes(y=(resiresi_scaled), x=(coordY2), col=(month2),fill=(month2) ), shape = 21,size = 1.5,colour = "black", stroke = 0.2)+
+  facet_grid(temp_increase2~prec_increase2)+
+  #  scale_x_continuous(limits=c(0,1), breaks=c(0,0.5))+
+  scale_y_continuous(limits=c(0,1), breaks=c(0,0.5,1))+
+  #scale_color_viridis(option="magma", direction=-1, begin=0)+ #, end=0.8
+  #scale_fill_viridis(option="magma", direction=-1, begin=0)+ #, end=0.8
+  scale_color_viridis(option="magma",  discrete=T)+ #, end=0.8
+  scale_fill_viridis(option="magma",  discrete=T)+ #, end=0.8
+  theme_bw()+  
+  theme(panel.margin.y = unit(0, "lines"),
+        strip.text.y = element_text(angle = 360, hjust = 0),
+        strip.background =element_rect(fill="white"))+
+  labs(fill = "Resistance Potential + Resilience Potential")+  
+  theme(legend.position="bottom")+  
+  xlab("Latitude")+
+  ylab("Resistance + Resilience (rescaled)")+
+  geom_smooth(aes(y=(resiresi_scaled), x=(coordY2), col=factor(month2),fill=factor(month2) ))
+  
+#coord_fixed()
+
+dev.off()
+
 file.rename("resistance_resilience_sub.pdf", paste("plots","resistance_resilience_sub.pdf",sep="/"))
 file.rename("resistance_resilience_full.pdf", paste("plots.supplement","resistance_resilience_full.pdf",sep="/"))
+file.rename("resistance_resilience_sub_curves.pdf", paste("plots","resistance_resilience_sub_curves.pdf",sep="/"))
 
 # plot legend
 

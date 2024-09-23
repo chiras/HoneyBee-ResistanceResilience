@@ -158,7 +158,7 @@ prediction.at.risk <- prediction.at.risk %>%
 
 res.man <- step(lm(accumulated.rel ~ as.numeric(coordY)+as.numeric(coordY):as.numeric(temp_increase2)+as.numeric(temp_increase2), data = prediction.at.risk))
 summary(res.man)
-avPlots(res.man)
+#avPlots(res.man)
 
 
 ##  repeat from return point 1 for precipitation
