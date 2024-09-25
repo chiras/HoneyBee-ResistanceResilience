@@ -36,7 +36,7 @@ library(doSNOW)
 library(progress)
 
 ## setting directories, variables and custom functions
-setwd('/Users/ra39huv/TMP/Data_processing/ITS2_Insignia.24-01-30/TestFullPipeline')
+setwd('/Users/ra39huv/TMP/Data_processing/ITS2_Insignia.24-01-30/Test_2/HoneyBee-ResistanceResilience')
 dir.create("plots")
 dir.create("plots.supplement")
 
@@ -53,7 +53,7 @@ test_results=list()
 # Prepare intermediate data and estimate distributions
 source("Rscript/R-1-Preprocessing.R")
 source("Rscript/R-2-DiversityMap.R", print.eval=TRUE)
-source("Rscript/R-3-EstimateDistributions.R")
+source("Rscript/R-3-EstimateDistributions.R", print.eval=TRUE)
 source("Rscript/R-4-EstimateScenariosAbundance.R")
 
 # Analyse risks
@@ -69,7 +69,7 @@ source("Rscript/R-6-TemporalProgression.R", print.eval=TRUE)
 source("Rscript/R-7-ResistanceResilience.R", print.eval=TRUE)
 source("Rscript/R-7.1-ResistanceResiliencePlot.R", print.eval=TRUE)
 
-# Historical changes (CHK)
+# Historical changes 
 measure="Temperature"
 source("Rscript/R-8-HistoricalChanges.R", print.eval=TRUE)
 
