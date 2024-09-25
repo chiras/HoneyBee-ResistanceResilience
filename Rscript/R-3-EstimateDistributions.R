@@ -37,6 +37,7 @@ plant.temp2 <-foreach (plant_i = 1:length(plant_taxa), .combine=rbind, .options.
   target.otu <- tmp.otu[plant,]
   target <- merge_phyloseq(target.otu, tmp.smp, tmp.tax)
   target.melt <- psmelt(target)
+  abundance.plant <- (sum(target.otu)/length(target.otu))
   
   if (!(sum(target.melt$Abundance) == 0) ){
   
@@ -110,6 +111,7 @@ plant.temp2 <-foreach (plant_i = 1:length(plant_taxa), .combine=rbind, .options.
                       countries = countries,
                       sites = sites,
                       sites2 = sites2,
+                      abundance = abundance.plant,
                       temp.mean = mean.temp, 
                       temp.sd = sd.temp,
                       temp.median= median(dist.temp),
@@ -140,6 +142,109 @@ stopCluster(cl)
 plant.temp <- plant.temp2 # when using parallelization
 write.table(plant.temp, file="tmp.plant.csv", sep=",")
 
-plant.temp.qualified <- plant.temp[plant.temp$sites > 10,]
+
+plant.temp.qualified <- plant.temp[plant.temp$sites2 > 5,]
+plant.temp.qualified$prec.mean=plant.temp.qualified$prec.mean^2
+plant.temp.qualified$prec.sd=plant.temp.qualified$prec.sd^2
+
 write.table(plant.temp.qualified, file="plant_niche_distributions.csv", sep=",")
 
+# plot most abundant plants and their climatic distributions
+top_abundant <- plant.temp.qualified %>%
+  arrange(desc(abundance)) %>%
+  slice(1:25)
+
+top_abundant$crop[top_abundant$crop] <- "crop"
+top_abundant$crop[top_abundant$crop==FALSE] <- "wild"
+
+top_abundant$species[top_abundant$species=="Crataegus monogyna x Crataegus punctata"] <- "Crataegus monogyna"
+
+# Create the barplot
+pdf("plots.supplement/most_abundant_plants.pdf", width=8, height=6)
+
+ggplot(top_abundant, aes(x = reorder(species, -abundance), y = abundance, fill = crop)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Species", 
+       y = "Overall relative abundance") +
+  scale_fill_viridis(discrete=T, option="viridis",begin = 0.3,end = 1)+
+  theme_minimal() +
+  theme(legend.title = element_blank(), axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+
+dev.off()
+
+# temperature distributions
+generate_normal_data <- function(mean, sd, species) {
+  x_vals <- seq(0, 40, length.out = 100)  # Fixed range from 0 to 40
+  y_vals <- dnorm(x_vals, mean = mean, sd = 1.2*sd)  # Generate corresponding y values using normal distribution
+  data.frame(x = x_vals, y = y_vals, species = species)  # Return a data frame with the species name
+}
+
+normal_data <- do.call(rbind, lapply(1:nrow(top_abundant), function(i) {
+  generate_normal_data(top_abundant$temp.mean[i], top_abundant$temp.sd[i], top_abundant$species[i])
+}))
+
+# Create the plot
+pdf("plots.supplement/most_abundant_plants_temperature.pdf", width=12, height=6)
+
+ggplot(normal_data, aes(x = x, y = y, color = species)) +
+  geom_line(linewidth = 1) +
+  labs(x = "Temperature", 
+       y = "Density") +
+  theme_minimal() +
+  scale_color_viridis(option="turbo", discrete=T)+
+  xlim(0, 35) +  
+  ylim(0, 0.4) +  
+  theme(legend.title = element_blank(),
+        legend.position = "bottom")  +
+  guides(color = guide_legend(ncol = 3))+
+  geom_text_repel(data = top_abundant, 
+                   aes(x = temp.mean, y = 0.2, 
+                       label = species, color = species),
+                   size = 4,        
+                   angle = 90,hjust = 0,
+                   nudge_y = 0.03,  
+                   box.padding = 0.55,  
+                   point.padding = 0.5, 
+                   direction = "x",  
+                   show.legend = FALSE) + 
+  theme(legend.position = "none") 
+
+dev.off()
+
+# precipitation distributions
+generate_normal_data <- function(mean, sd, species) {
+  x_vals <- seq(0, 150, length.out = 100)  
+  y_vals <- dnorm(x_vals, mean = mean, sd = 1.2*sd) 
+  data.frame(x = x_vals, y = y_vals, species = species)  
+}
+
+normal_data <- do.call(rbind, lapply(1:nrow(top_abundant), function(i) {
+  generate_normal_data(top_abundant$prec.mean[i], top_abundant$prec.sd[i], top_abundant$species[i])
+}))
+
+# Create the plot
+pdf("plots.supplement/most_abundant_plants_precipitation.pdf", width=8, height=6)
+ggplot(normal_data, aes(x = x, y = y, color = species)) +
+  geom_line(linewidth = 1) +
+  labs(x = "Precipitation", 
+       y = "Density") +
+  theme_minimal() +
+  scale_color_viridis(option="turbo", discrete=T)+
+  xlim(0, 150) +  
+  ylim(0, 0.3) +  
+  theme(legend.title = element_blank(),
+        legend.position = "bottom")  +
+  guides(color = guide_legend(ncol = 3))+
+  geom_text_repel(data = top_abundant, 
+                   aes(x = prec.mean, y = 0.12, 
+                       label = species, color = species),
+                   size = 4,        
+                   angle = 90, hjust = 0,
+                   nudge_y = 0.03,  
+                   box.padding = 0.55,  
+                   point.padding = 0.5, 
+                   direction = "x",  
+                   show.legend = FALSE) + 
+  theme(legend.position = "none")  
+
+dev.off()
