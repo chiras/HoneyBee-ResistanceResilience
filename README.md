@@ -13,7 +13,6 @@ Main call of the R code is in the ```R-0-Umbrella.R``` file, where all other fil
 
 The data folder holds files that need unzipping before the analyses (done in the script though).
 
-Consider to have a fairly 
 
 ## Dependencies
 
