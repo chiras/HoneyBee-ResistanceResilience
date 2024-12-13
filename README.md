@@ -42,3 +42,5 @@ library(progress)
 ## Computational requirements
 
 Consider these analyses are quite intense and require at least 20GB of RAM, with > 24GB recommended. Most of the computational intensive tasks are parallelized, which means the more CPUs are available, the faster the processes. The function ``` makeCluster(cores[1]-2) ``` is used to estimate cores available, and will use all -2 of those.
+
+Analyses for the article were performed on MacOSX 13.6.7 with a MacBook Pro Max M1 with 64 GB of RAM and R version 4.4.1 (2024-06-14).
