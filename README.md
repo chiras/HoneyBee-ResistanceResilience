@@ -2,6 +2,7 @@
 
 ## Citation
 **Honey bee food resources under threat with climate change**
+
 Andreia Quaresma, Hans Baveco, Robert Brodschneider, Bas Buddendorf, Norman Carreck, Kristina Gratzer, Fani Hatjina, Ole Kilpinen, Ivo Roessink, Flemming Vejsnaes, Jozef van der Steen, M. Alice Pinto, Alexander Keller
 
 (in submission)
