@@ -29,7 +29,10 @@ exFormat1a <- formatsitepair(testData1a,
 
 model <- gdm(exFormat1a, geo=T)
 summary(model)
+
+pdf("plots.supplement/GDMs.pdf", width=8, height=12)
 plot(model, plot.layout=c(3,2))
+dev.off()
 
 total = 48.162
 t_r = 1.815
@@ -61,4 +64,6 @@ div3 = merge(div2, meta.data, by="site")
 div3 = div3[div3$lat>30,]
 summary(step(lm(esn~temp+long+prec+lat+I(lat^2), data=div3)))
 
-plot(div3$esn~div3$lat)
+#pdf("plots.supplement/LM.pdf", width=8, height=6)
+#plot(div3$esn~div3$lat)
+#dev.off()
