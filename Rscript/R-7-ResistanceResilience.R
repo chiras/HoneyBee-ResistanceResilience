@@ -142,7 +142,7 @@ stopCluster(cl)
 
 ### Predict Resi Resi
 temp_levels = seq(0,5,0.5)
-prec_levels = seq(0,40,5)
+prec_levels = seq(0,45,5)
 cl <- makeCluster(cores[1]-2) #not to overload your computer
 registerDoSNOW(cl)
 
@@ -179,7 +179,7 @@ prediction.resiresi <- foreach(prec_increase=prec_levels, .options.snow=opts , .
       sum(names(rep.temp) == names(rep.prec)) == length(names(rep.temp))
       sum(names(rep.temp) == names(rep.geo)) == length(names(rep.temp))
       
-      min.dist.geo <- 0.20 # equals 300 km radius
+      min.dist.geo <- 0.35 # equals 300 km radius = 0.2 , 0.35 = 500km
       min.prob <- 0.15 # equals 15 % probability for prec and temp
       min.tax <- 0.5 # equals same family
       

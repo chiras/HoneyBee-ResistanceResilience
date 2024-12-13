@@ -119,7 +119,7 @@ prediction.precipitation <- foreach(prec_increase=prec_levels, .options.snow=opt
                                    temp_increase = temp_increase,
                                    crop = plant.species.meta$crop)
       
-      if (plant.species.meta$sites > 10){
+      if (plant.species.meta$sites2 > 5){ #sites > 10
         if (plant.species.meta$prec.q01 > sqrt(site.melt$Prec[1])-temp_increase){
           prediction.tmp$prediction <- "<q01"
         }else if (plant.species.meta$prec.q05 > sqrt(site.melt$Prec[1])-temp_increase){
