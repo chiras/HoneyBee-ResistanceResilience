@@ -49,3 +49,6 @@ Analyses for the article were performed on MacOSX 13.6.7 with a MacBook Pro Max 
 
 Preprocessing of metabarcoding was done according to: https://github.com/chiras/metabarcoding_pipeline
 Some parts of the R Script also origin from this GitHub repository. 
+
+## Metadata file:
+Coordinates were truncated due to an agreement with all citizen scientists.
