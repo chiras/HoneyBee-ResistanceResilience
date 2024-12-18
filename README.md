@@ -51,4 +51,4 @@ Preprocessing of metabarcoding was done according to: https://github.com/chiras/
 Some parts of the R Script also origin from this GitHub repository. 
 
 ## Metadata file:
-Coordinates were truncated due to an agreement with all citizen scientists.
+Coordinates were truncated due to an agreement with all citizen scientists to preserve anonymity. The non-truncated version is available upon request. 
