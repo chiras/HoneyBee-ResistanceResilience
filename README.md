@@ -1,4 +1,4 @@
-# R code for Quaresma et al. 2024
+# R code for Quaresma et al. 2025
 
 ## Citation
 **Honey bee food resources under threat with climate change**
