@@ -10,7 +10,7 @@ Andreia Quaresma, Hans Baveco, Robert Brodschneider, Bas Buddendorf, Norman Carr
 
 ## Calling the script
 Main call of the R code is in the ```R-0-Umbrella.R``` file, where all other files are sourced. 
-This will produce all graphs in the subfolder plots, as well as store the test results in the variable ```test_results```. 
+This will reproduce all graphs in the subfolder plots, as well as store the test results in the variable ```test_results```. 
 
 The data folder holds files that need unzipping before the analyses (done in the script though).
 
@@ -39,7 +39,7 @@ library(doParallel)
 library(doSNOW)
 library(progress)
 ```
-these can be installed via ``ìnstall.packages()``` if not already installed.
+these can be installed via ```install.packages()``` if not already installed.
 
 ## Computational requirements
 
