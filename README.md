@@ -10,6 +10,7 @@ Andreia Quaresma, Hans Baveco, Robert Brodschneider, Bas Buddendorf, Norman Carr
 
 ## Calling the script
 Main call of the R code is in the ```R-0-Umbrella.R``` file, where all other files are sourced. 
+This will produce all graphs in the subfolder plots, as well as store the test results in the variable ```test_results```. 
 
 The data folder holds files that need unzipping before the analyses (done in the script though).
 
@@ -38,12 +39,13 @@ library(doParallel)
 library(doSNOW)
 library(progress)
 ```
+these can be installed via ``ìnstall.packages()``` if not already installed.
 
 ## Computational requirements
 
 Consider these analyses are quite intense and require at least 20GB of RAM, with > 24GB recommended. Most of the computational intensive tasks are parallelized, which means the more CPUs are available, the faster the processes. The function ``` makeCluster(cores[1]-2) ``` is used to estimate cores available, and will use all -2 of those.
 
-Analyses for the article were performed on MacOSX 13.6.7 with a MacBook Pro Max M1 with 64 GB of RAM and R version 4.4.1 (2024-06-14).
+Analyses for the article were performed on MacOSX 13.6.7 with a MacBook Pro Max M1 with 64 GB of RAM, 10 cores and R version 4.4.1 (2024-06-14). From start to end, these analyses take using this device around 8 hours computational time. 
 
 ## Metabarcoding preprocessing: 
 
