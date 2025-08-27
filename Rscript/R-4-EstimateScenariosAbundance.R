@@ -1,144 +1,132 @@
+##############################################################
+# R-4-EstimateScenariosAbundance.R
+# Estimate local plant responses to projected temperature or 
+# precipitation change, using KDE thresholds (from R-3).
+#
+# Dependencies:
+#   - Requires:
+#       - samples, tmp.otu, tmp.smp, tmp.tax (from R-1)
+#       - plant.temp, plant.kde.funs (from R-3)
+#   - Requires: measure <- "Temperature" or "Precipitation"
+# Outputs:
+#   - prediction.temperature.csv and prediction.precipitation.csv
+##############################################################
 
-################################################
-# Data analysis 3
-## Estimate future scenarios, per site
-print("Estimate future scenarios: Preparation")
+print(paste("Estimating future scenarios for:", measure))
 
-sample_names <- sample_names(samples)#[c(1,1999,2111,322,1199)]
-predictionTemp <- data.frame()
+# Set climate change levels
+if (measure == "Temperature") {
+  change_levels <- seq(0, 5, by = 0.5)  # Temperature increase (°C)
+} else if (measure == "Precipitation") {
+  change_levels <- seq(0, 50, by = 5)   # Precipitation decrease (mm)
+} else {
+  stop("measure must be 'Temperature' or 'Precipitation'")
+}
 
-### setting parallel computing
-cl <- makeCluster(cores[1]-2) 
+
+# Prepare parallel backend
+cores <- detectCores()
+cl <- makeCluster(cores[1] - 2)
 registerDoSNOW(cl)
 
-predictionPrec <- data.frame()
-predictionTemp <- data.frame()
+# Get all site IDs (sample names)
+site_names <- sample_names(samples)
 
-prec_levels <- seq(0,25,2.5)
-temp_levels <- seq(0,5,0.5)
-
-## TEMPERATURE
-pb <- txtProgressBar(0, length(temp_levels), style = 3)
+# Set up progress bar
+pb <- txtProgressBar(0, length(change_levels), style = 3)
 progress <- function(n) setTxtProgressBar(pb, n)
-opts <- list(progress=progress)
-
-prediction.temperature <- foreach(prec_increase=temp_levels, .options.snow=opts , .combine="rbind",  .packages=c("phyloseq","tidyr","speedyseq","dplyr")) %dopar% {
-  # remove and set global variables
-  rm("temp_increase","siteY","site.phyloseq","site.melt","plant.p","plant","prediction.tmp","plant.species.meta")
-  .GlobalEnv$samples <- samples
-  .GlobalEnv$sample_names <- sample_names
-  temp_increase = prec_increase
-  
-  # iterate over sites
-  predictionPlants=data.frame()
-  site.count=c()
-  for (siteY in sample_names){
-    site.otu <- tmp.otu[,siteY]
-    site.phyloseq <- merge_phyloseq(site.otu,tmp.smp,tmp.tax)
-    
-    site.melt <- psmelt(site.phyloseq)
-    site.melt <- site.melt[site.melt$Abundance > 0,]
-    site.count=c(site.count,siteY)
-
-    # iterate over plants
-    for (plant.p in site.melt$species){
-      plant.species.meta = plant.temp[plant.temp$species == plant.p,]
-      
-      prediction.tmp <- data.frame(species = plant.p,
-                                   site = site.melt$Sample[1],
-                                   date = site.melt$Month[1],
-                                   country = site.melt$Country[1],
-                                   coordY = site.melt$CoordY[1],
-                                   abundance = site.melt[site.melt$species == plant.p,"Abundance"],
-                                   prediction = NA,
-                                   p.dist.value = pnorm(site.melt$Temp[1]+temp_increase, mean=plant.species.meta$temp.mean, sd=plant.species.meta$temp.sd),
-                                   endemism = plant.species.meta$countries,
-                                   temp_increase = temp_increase,
-                                   crop = plant.species.meta$crop)
-      
-      if (plant.species.meta$sites > 10){
-        if (plant.species.meta$temp.q99 < site.melt$Temp[1]+temp_increase){
-            prediction.tmp$prediction <- ">q99"
-          }else if (plant.species.meta$temp.q95 < site.melt$Temp[1]+temp_increase){
-            prediction.tmp$prediction <- ">q95"
-          }else if (plant.species.meta$temp.q90 < site.melt$Temp[1]+temp_increase){
-            prediction.tmp$prediction <- ">q90"
-          }else{
-            prediction.tmp$prediction = "<=q90"
-          }
-        
-      }
-      # maybe real q value? comes later...
-      rm("plant.p","plant")
-
-      predictionPrec=rbind(predictionPrec,prediction.tmp)
-      predictionPlants=rbind(predictionPlants,prediction.tmp)
-    }
-  }
-  return(predictionPlants)
-}
-write.table(prediction.temperature, file="tmp.prediction2.temp.csv", sep=",")
+opts <- list(progress = progress)
 
 
-## PRECIPITATION
-pb <- txtProgressBar(0, length(prec_levels), style = 3)
-progress <- function(n) setTxtProgressBar(pb, n)
-opts <- list(progress=progress)
-
-prediction.precipitation <- foreach(prec_increase=prec_levels, .options.snow=opts , .combine="rbind",  .packages=c("phyloseq","tidyr","speedyseq","dplyr")) %dopar% {
-  # Global variables
-  rm("temp_increase","siteY","site.phyloseq","site.melt","plant.p","plant","prediction.tmp","plant.species.meta")
-  .GlobalEnv$samples <- samples
-  .GlobalEnv$sample_names <- sample_names
-  temp_increase = sqrt(prec_increase)
-
-  predictionPlants=data.frame()
-  site.count=c()
-  # Iterate over sites
-  for (siteY in sample_names){
-    site.otu <- tmp.otu[,siteY]
-    site.phyloseq <- merge_phyloseq(site.otu,tmp.smp,tmp.tax)
-    
-    site.melt <- psmelt(site.phyloseq)
-    site.melt <- site.melt[site.melt$Abundance > 0,]
-    site.count=c(site.count,siteY)
-
-    # iterate over plants
-    for (plant.p in site.melt$species){
-      plant.species.meta = plant.temp[plant.temp$species == plant.p,]
-      
-      prediction.tmp <- data.frame(species = plant.p,
-                                   site = site.melt$Sample[1],
-                                   date = site.melt$Month[1],
-                                   country = site.melt$Country[1],
-                                   coordY = site.melt$CoordY[1],
-                                   abundance = site.melt[site.melt$species == plant.p,"Abundance"],
-                                   prediction = NA,
-                                   p.dist.value = pnorm(sqrt(site.melt$Prec[1])-temp_increase, mean=plant.species.meta$prec.mean, sd=plant.species.meta$prec.sd),
-                                   endemism = plant.species.meta$countries,
-                                   temp_increase = temp_increase,
-                                   crop = plant.species.meta$crop)
-      
-      if (plant.species.meta$sites2 > 5){ #sites > 10
-        if (plant.species.meta$prec.q01 > sqrt(site.melt$Prec[1])-temp_increase){
-          prediction.tmp$prediction <- "<q01"
-        }else if (plant.species.meta$prec.q05 > sqrt(site.melt$Prec[1])-temp_increase){
-          prediction.tmp$prediction <- "<q05"
-        }else if (plant.species.meta$prec.q10> sqrt(site.melt$Prec[1])-temp_increase){
-          prediction.tmp$prediction <- "<q10"
-        }else{
-          prediction.tmp$prediction = ">=q10"
-        }
-        # maybe real q value? comes later...
-        rm("plant.p","plant")
-        
-      }
-      predictionPrec=rbind(predictionPrec,prediction.tmp)
-      predictionPlants=rbind(predictionPlants,prediction.tmp)
-    }
-  }
-  return(predictionPlants)
+# Run predictions in parallel
+predictions <- foreach(change = change_levels, .combine = "rbind", .options.snow = opts,
+                       .packages = c("phyloseq", "tidyr", "speedyseq", "dplyr")) %dopar% {
+local({                        
+ scenario_df <- data.frame()  # collects predictions for this delta
+ 
+ for (site_id in site_names) {
+   # Prepare site-specific phyloseq object and melt
+   site_otu <- tmp.otu[, site_id]
+   site_phy <- merge_phyloseq(site_otu, tmp.smp, tmp.tax)
+   site_melt <- psmelt(site_phy)
+   site_melt <- site_melt[site_melt$Abundance > 0, ]
+   
+   for (plant_id in site_melt$species) {
+     # Get metadata for plant
+     meta <- plant.temp[plant.temp$species == plant_id, ]
+     if (nrow(meta) == 0) next
+     
+     # Build result row
+     row <- data.frame(
+       species = plant_id,
+       site = site_id,
+       date = site_melt$Month[1],
+       country = site_melt$Country[1],
+       coordY = site_melt$CoordY[1],
+       abundance = site_melt[site_melt$species == plant_id, "Abundance"],
+       prediction = NA,
+       delta = change,
+       crop = meta$crop
+     )
+     
+     # Only evaluate if species is sufficiently sampled. Otherwise prediction will remain NA
+     if (meta$sites2 > 5) {
+       
+       # Extract current climate value
+       current_value <- if (measure == "Temperature") {
+         site_melt$Temp[1]
+       } else {
+         site_melt$Prec[1]
+       }
+       
+       # Apply change (positive for temp increase, negative for precip loss)
+       future_value <- if (measure == "Temperature") {
+         current_value + change
+       } else {
+         current_value - change
+       }
+       
+       # Get KDE threshold values
+       if (measure == "Temperature") {
+         # Fallback if missing
+         if (is.na(meta$temp.p99.kde)) meta$temp.p99.kde <- meta$temp.max
+         
+         if (meta$temp.p99.kde < future_value) {
+           row$prediction <- ">p99"
+         } else if (meta$temp.p95.kde < future_value) {
+           row$prediction <- ">p95"
+         } else if (meta$temp.p90.kde < future_value) {
+           row$prediction <- ">p90"
+         } else {
+           row$prediction <- "<=p90"
+         }
+         
+       } else if (measure == "Precipitation") {
+         # Fallback if missing
+         if (is.na(meta$prec.p01.kde)) meta$prec.p01.kde <- meta$prec.min
+         
+         if (meta$prec.p01.kde > future_value) {
+           row$prediction <- "<p01"
+         } else if (meta$prec.p05.kde > future_value) {
+           row$prediction <- "<p05"
+         } else if (meta$prec.p10.kde > future_value) {
+           row$prediction <- "<p10"
+         } else {
+           row$prediction <- ">=p10"
+         }
+       }
+     }
+     
+     scenario_df <- rbind(scenario_df, row)
+   }
+ }
+ 
+ return(scenario_df)
+ })
 }
 
-stopCluster(cl)
-write.table(prediction.precipitation, file="tmp.prediction2.prec.csv", sep=",")
+# Write output as file
+out_path <- paste0("intermediate.data/prediction.",measure,".csv")
+write.table(predictions, file = out_path, sep = ",", row.names = FALSE)
+
+print(paste0("Finished writing predictions for: ", measure))
