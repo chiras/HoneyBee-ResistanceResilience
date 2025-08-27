@@ -176,7 +176,7 @@ dev.off()
 #### subset for main text
 prediction2.1.r <- prediction2.r[prediction2.r$delta %in% subset_levels,] 
 
-pdf(paste0("plots/risk_losses_abundance_latitude_",measure,"_sub.pdf"), width=8, height=6.5)
+pdf(paste0("plots/risk_losses_abundance_latitude_",measure,"_sub.pdf"), width=10, height=6.5)
 
 ggplot(prediction2.1.r, aes(fill=iPC, shape=crop,y=accumulated.rel, x=1)) + 
   #geom_bar(position = position_stack(reverse = T),stat="identity",fill="black") +
